@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="Bootstrap/bootstrap.css">
+        <link rel="stylesheet" href="CSS/indexStyle.css">
+
+        <script src="https://unpkg.com/scrollreveal"></script> <!-- API per lo scroll reveal -->
+
+        <title>Home page</title>
+
+    </head>
+
+    <body>
+
+        <script src="Bootstrap/js/bootstrap.bundle.js"></script>
+
+        <!-- Navigation bar -->
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+    
+                <img src="Media/logo.png" alt="" style="height: 40px;" class="ms-2"> <!-- Logo -->
+    
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button> <!-- Hamburger che sostituisce la navbar in schermi piccoli -->
+
+    
+                <div class="collapse navbar-collapse" id="navbarScroll">
+      
+                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a> <!-- Link alla home -->
+                        </li>
+        
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contatti</a> <!-- Link alla pagina dei contatti -->
+                        </li>
+        
+                    </ul>
+
+                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="Login/loginPage.html" aria-disabled="true">Accedi</a> <!-- Link alla pagina di login -->
+                        </li>
+      
+                        <li class="nav-item">
+                            <a class="nav-link" href="Signup/signupPage.html" aria-disabled="true">Registrati</a> <!-- Link alla pagina di registrazione -->
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+        <section class="main"> <!-- Main section -->
+
+            <div class="container pb-5">
+                <div class="row mb-6">
+                    <div class="mb-5">
+                        <h1 class="col-lg-7 mb-5">Scopri nuovi luoghi e nuove emozioni!</h1>
+                        <button class="btn btn-primary my-2">Scopri di più</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="poster mt-5"> <!-- Poster section -->
+
+            <div class="poster-img reveal"> <!-- La classe reveal permette all'API dello scroll reveal di mostrare gli elementi in cascata -->
+                <img src="Media/posterImage.jpg" alt="">
+            </div>
+
+            <div class="poster-content reveal">
+                <h1 class="my-5">Cos'è TravelMaker?</h1>
+                <p>Il sito TravelMaker nasce per condividere il proprio itinerario di viaggio con altre persone. Qui dunque potrai prendere spunto per i tuoi futuri viaggi, grazie anche ai commenti degli altri utenti!</p>
+                <button href="" class="btn btn-primary my-3">Inizia subito!</button>
+            </div>
+
+        </section>
+
+        <!-- Jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+        <script>
+
+            $( document ).ready(function()  //Quando il documento è caricato, viene applicata la ScrollReveal
+            { ScrollReveal().reveal('.reveal', {distance: '100px', duration: 1500, easing: 'cubic-bezier(.215, .61, .355, 1)', interval: 600}); });
+
+        </script>
+
+    </body>
+
+</html>

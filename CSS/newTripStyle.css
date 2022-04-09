@@ -1,0 +1,310 @@
+body
+{
+    background: linear-gradient(0deg, rgba(0,0,0,.3), rgba(0,0,0,.5)), url("../Media/loginBackground.jpg") no-repeat fixed;
+    background-position: center;
+    background-size: cover;
+    overflow-x: hidden;
+}
+
+.general-container
+{
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: auto;
+    overflow: hidden;
+}
+
+.title
+{
+    display: flex;
+    width: 100%;
+    height: auto;
+    margin-left: 1rem;
+    margin-top: 4rem;
+}
+
+h1, label
+{ color: white; }
+
+.title label
+{
+    font-weight: 500;
+    font-size: 38px;
+}
+
+.title input
+{
+    font-size: 25px;
+    padding-left: 10px;
+    margin-left: 1.3rem;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.period
+{
+    -webkit-box-shadow: 0px 0px 37px 4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 37px 4px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 37px 4px rgba(0,0,0,0.75);
+    align-self: center;
+    display: flex;
+    width: 60%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-top: 10px;
+    padding-bottom: 20px;
+
+}
+
+.date-elements
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.period-label-start, .period-label-end
+{
+    font-weight: 500;
+    font-size: 30px;
+    margin-left: 4rem;
+}
+
+.top-elements
+{
+    display: flex;
+    width: 100%;
+}
+
+input[type=date]
+{
+    margin-left: 1.2rem;
+    margin-right: auto;
+    border-radius: 10px;
+    border: 1px solid black;
+    font-size: 20px;
+}
+
+input[type=file]
+{
+    display: none;
+    margin-left: 1.2rem;
+    font-size: 20px;
+}
+
+.file-picker
+{
+    height: fit-content;
+    width: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-weight: 500;
+    font-size: 20px;
+    border-radius: 60px;
+    background-color: #164995;
+    border: none;
+    outline: none;
+    color: white;
+    margin-right: 3rem;
+    margin-left: auto;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.period-description
+{
+    width: 90%;
+    margin-top: 20px;
+    border-radius: 10px;
+    border: 0px solid;
+    padding-left: 5px;
+    padding-top: 5px;
+    color: black;
+    border: 1px solid black;
+}
+
+.btn-submit
+{
+    width: fit-content; 
+    padding-left: 25px;
+    padding-right: 25px;
+    border-radius: 60px;
+    font-size: 27px;
+    font-weight: 500;
+    margin-left: 1rem;
+    margin-bottom: 5rem;
+    background-color: #164995;
+    outline: none;
+    border: none;
+}
+
+.btn-add
+{
+    width: fit-content; 
+    padding-left: 50px;
+    padding-right: 50px;
+    border-radius: 60px;
+    font-size: 30px;
+    font-weight: 500;
+    margin-left: 1rem;
+    background-color: #164995;
+    outline: none;
+    border: none;
+    color: white;
+    align-self: center;
+}
+
+.btn-trash
+{
+    width: fit-content; 
+    padding-left: 50px;
+    padding-right: 50px;
+    border-radius: 60px;
+    font-size: 30px;
+    font-weight: 500;
+    margin-left: 1rem;
+    background-color: rgb(184, 16, 16);
+    outline: none;
+    border: none;
+    color: white;
+    align-self: center;
+    margin-top: 10px;
+}
+
+@media (max-width: 1450px)
+{
+    .period
+    { width: 80%; }
+
+    .period-label-start, .period-label-end
+    { 
+        font-size: 28px;
+        margin-left: 2rem; 
+    }
+
+    input[type=date]
+    {
+        margin-left: 0.7rem;
+        margin-right: auto;
+        font-size: 20px;
+    }
+
+    .file-picker
+    { font-size: 20px; }
+
+    .period-description
+    { 
+        width: 70%;
+        font-size: 15px; 
+    }
+}
+
+@media (max-width: 1280px)
+{
+    .period-label-start
+    { margin-left: 3rem; }
+
+    .period-label-end
+    { margin-left: 3rem; }
+}
+
+@media (max-width: 950px)
+{
+    .date-elements
+    {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .period-label-end
+    { margin-right: 15px; }
+}
+
+@media (max-width: 835px)
+{
+    .period
+    { width: 90%; }
+}
+
+@media (max-width: 620px)
+{
+    .title label, .title input[type=text]
+    { font-size: 25px; }
+}
+
+@media (max-width: 570px)
+{
+    .period-label-start, .period-label-end
+    { font-size: 20px; }
+
+    .period-label-end
+    { margin-right: 10px; }
+
+    .file-picker
+    { font-size: 15px; }
+
+    input[type=date]
+    { font-size: 15px; }
+}
+
+@media (max-width: 530px)
+{
+    .title label, .title input[type=text]
+    { font-size: 20px; }
+
+    .btn-add
+    { 
+        font-size: 20px; 
+        margin-top: 10px;
+        margin-bottom: 2rem;
+    }
+
+    .period
+    { margin-bottom: 1rem; }
+
+    .btn-submit
+    { font-size: 20px; }
+
+    .btn-trash
+    { font-size: 20px; }
+}
+
+@media (max-width: 465px)
+{
+    .title
+    { 
+        flex-direction: column; 
+        width: fit-content;
+    }
+
+    .title input[type=text]
+    { margin-left: 0rem; }
+
+    .top-elements
+    { 
+        flex-direction: column; 
+        align-items: center;
+    }
+
+    .file-picker
+    {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 350px)
+{
+    .title label, .title input[type=text]
+    { 
+        font-size: 18px; 
+        height: auto;
+    }
+}

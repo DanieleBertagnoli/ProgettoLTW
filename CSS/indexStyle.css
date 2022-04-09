@@ -1,0 +1,161 @@
+/* Main section */
+
+.main
+{
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex; 
+    align-items: center;
+    background: linear-gradient(0deg, rgba(0,0,0,.2), rgba(0,0,0,.8)), url('../Media/homeBackground.jpg') no-repeat center center;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.mb-6
+{
+    margin-bottom: 200px;
+}
+
+.main h1
+{
+    font-size: 4rem;
+    font-weight: 700;
+    color: white;
+}
+
+.main button
+{
+    height: auto;
+    width: auto;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: 500;
+    font-size: 25px;
+    border-radius: 60px;
+    background-color: rgb(12, 111, 192);
+    border: none;
+    outline: none;
+}
+
+#backgroundVideo
+{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    min-width: 100vh;
+    min-height: 100vh;
+    z-index: 0;
+}
+
+/* Poster section */
+
+.poster
+{
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    align-items: center;
+}
+
+.poster-img
+{
+    width: 65%;
+    height: 100%;
+}
+
+.poster-img img
+{
+    object-fit: cover;
+    width: 100%;
+    height: 80%;
+}
+
+.poster-content
+{
+    width: 35%;
+    height: 100%;
+    padding: 30px;
+}
+
+.poster button
+{
+    height: auto;
+    width: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: 500;
+    font-size: 25px;
+    border-radius: 60px;
+    background-color: rgb(12, 111, 192);
+    border: none;
+    outline: none;
+}
+
+.poster h1
+{
+    font-size: 70px; 
+    font-weight: 900;
+}
+
+.poster p
+{
+    line-height: 28px; 
+    color: #666; 
+    font-weight: 300;
+}
+
+@media (max-width: 1430px) 
+{
+    .poster h1
+    { font-size: 60px; } 
+}
+
+@media (max-width: 1250px) 
+{
+    .main h1
+    { font-size: 60px; }
+
+    .poster h1
+    { font-size: 40px; } 
+}
+
+@media (max-width: 870px) 
+{
+    .main h1
+    { font-size: 50px; }
+
+    .main button
+    { font-size: 20px; }
+
+    .poster
+    {
+        flex-wrap: wrap;
+        height: auto;
+    }
+
+    .poster button
+    { font-size: 20px; }
+
+    .poster-img, .poster-content 
+    { width: 100%;}
+}
+
+@media (max-width: 470px)
+{
+    .main h1
+    { font-size: 2rem; }
+
+    .main button
+    { font-size: 15px; }
+
+    .poster h1
+    { font-size: 30px; } 
+
+    .poster button
+    { font-size: 15px; }
+} 
