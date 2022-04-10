@@ -55,15 +55,15 @@
 
 
     $keywords = " " . strtolower($title) . " ";
-    $toRemove = array("\bdi\s", "\ba\s", "\bda\s", "\bin\s", "\bcon\s", "\bsu\s", "\bper\s", "\btra\s", "\bfra\s", "\bil\s", "\blo\s", "\bla\s", "\bi\s", "\bgli\s", "\ble\s", "\bl'\b", "\bun\s", "\bun'\s", "\buna\s", "\bnel\s", "\bnella\s");
-    $keywords = str_replace($toRemove, "", $keywords);
+    $toRemove = array(" di ", " a ", " da ", " in ", " con ", " su ", " per ", " tra ", " fra ", " il ", " lo ", " la ", " i ", " gli ", " le ", " l' ", " un ", " un' ", " una ", " nel ", " nella ");
+    $keywords = str_replace($toRemove, " ", $keywords);
 
-    $query = $connection -> prepare("INSERT INTO trip (TITLE, DESCRIPTION, VISITED_PLACES, USER, KEYWORDS) VALUES (?, ?, ?, ?, ?)");
-    $query -> bind_param("sssss", $title, $description, $visitedPlaces, $user, $keywords);
+    $query = $connection -> prepare("INSERT INTO trip (ID, TITLE, DESCRIPTION, VISITED_PLACES, USER, KEYWORDS) VALUES (?, ?, ?, ?, ?, ?)");
+    $query -> bind_param("isssss", $nextId, $title, $description, $visitedPlaces, $user, $keywords);
     $result = $query -> execute();
 
     if($result)
-    { echo "Caricamento avvenuto con successo: <a href='../../tripViewer.php?tripID=" . $nextId . "'>Clicca qui per visualizzare il tuo viaggio!</a> "; }
+    { header("Location: ../../tripViewer.php?tripID=" . $nextId); }
     else
     { echo "Errore durante il caricamento, riprova più tardi"; }
 ?>
