@@ -35,10 +35,13 @@
     font-weight: 500;
     font-size: 25px;
     border-radius: 60px;
-    background-color: rgb(12, 111, 192);
+    background-color: #164995;
     border: none;
     outline: none;
 }
+
+.main button:hover
+{ background-color: #008867; }
 
 #backgroundVideo
 {
@@ -91,10 +94,13 @@
     font-weight: 500;
     font-size: 25px;
     border-radius: 60px;
-    background-color: rgb(12, 111, 192);
+    background-color: #164995;
     border: none;
     outline: none;
 }
+
+.poster button:hover
+{ background-color: #008867; }
 
 .poster h1
 {

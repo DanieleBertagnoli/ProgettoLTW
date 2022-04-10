@@ -18,10 +18,11 @@ body
 .title
 {
     display: flex;
-    width: 100%;
+    flex-direction: column;
+    width: fit-content;
     height: auto;
-    margin-left: 1rem;
-    margin-top: 4rem;
+    margin-left: 2rem;
+    margin-top: 2rem;
 }
 
 h1, label
@@ -33,20 +34,48 @@ h1, label
     font-size: 38px;
 }
 
-.title input
+.title textarea, .title input
 {
     font-size: 25px;
     padding-left: 10px;
-    margin-left: 1.3rem;
     border-radius: 10px;
     border: 1px solid black;
 }
 
+.title input:focus, .title textarea:focus, .period input:focus, .period textarea:focus
+{ 
+    border: 3px solid #008867;
+    outline: none;
+}
+
+.thumbnail-picker
+{
+    height: fit-content;
+    width: 260px;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-weight: 500;
+    font-size: 20px;
+    border-radius: 60px;
+    background-color: #164995;
+    border: none;
+    outline: none;
+    color: white;
+    margin-right: auto;
+    margin-left: 3rem;
+    margin-bottom: 0.5rem;
+    margin-top: 2rem;
+    cursor: pointer;
+}
+
 .period
 {
-    -webkit-box-shadow: 0px 0px 37px 4px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 0px 37px 4px rgba(0,0,0,0.75);
-    box-shadow: 0px 0px 37px 4px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 28px 18px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 28px 18px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 28px 18px rgba(0,0,0,0.75);
     align-self: center;
     display: flex;
     width: 60%;
@@ -99,13 +128,14 @@ input[type=file]
 .file-picker
 {
     height: fit-content;
-    width: auto;
-    padding-left: 25px;
+    width: fit-content;
+    text-align: center;
+    padding-left: 15px;
     padding-right: 25px;
     padding-top: 7px;
     padding-bottom: 7px;
     font-weight: 500;
-    font-size: 20px;
+    font-size: 30px;
     border-radius: 60px;
     background-color: #164995;
     border: none;
@@ -116,6 +146,9 @@ input[type=file]
     margin-bottom: 0.5rem;
     cursor: pointer;
 }
+
+.file-picker:hover
+{ background-color: #008867; }
 
 .period-description
 {
@@ -144,6 +177,9 @@ input[type=file]
     border: none;
 }
 
+.btn-submit:hover
+{ background-color: #008867; }
+
 .btn-add
 {
     width: fit-content; 
@@ -159,6 +195,9 @@ input[type=file]
     color: white;
     align-self: center;
 }
+
+.btn-add:hover
+{ background-color: #008867; }
 
 .btn-trash
 {
@@ -176,6 +215,9 @@ input[type=file]
     align-self: center;
     margin-top: 10px;
 }
+
+.btn-trash:hover
+{ background-color: #db3a3a; }
 
 @media (max-width: 1450px)
 {
@@ -232,31 +274,28 @@ input[type=file]
     { width: 90%; }
 }
 
-@media (max-width: 620px)
+@media (max-width: 680px)
 {
-    .title label, .title input[type=text]
+    .title label, .title textarea, .title input
     { font-size: 25px; }
 }
 
-@media (max-width: 570px)
+@media (max-width: 650px)
 {
-    .period-label-start, .period-label-end
-    { font-size: 20px; }
-
     .period-label-end
     { margin-right: 10px; }
-
-    .file-picker
-    { font-size: 15px; }
-
-    input[type=date]
-    { font-size: 15px; }
 }
 
 @media (max-width: 530px)
 {
-    .title label, .title input[type=text]
-    { font-size: 20px; }
+    .title input, .title textarea
+    { font-size: 18px; }
+
+    .thumbnail-picker
+    { 
+        font-size: 18px; 
+        width: 230px;
+    }
 
     .btn-add
     { 
@@ -273,18 +312,6 @@ input[type=file]
 
     .btn-trash
     { font-size: 20px; }
-}
-
-@media (max-width: 465px)
-{
-    .title
-    { 
-        flex-direction: column; 
-        width: fit-content;
-    }
-
-    .title input[type=text]
-    { margin-left: 0rem; }
 
     .top-elements
     { 
@@ -298,13 +325,31 @@ input[type=file]
         margin-right: auto;
         margin-top: 10px;
     }
+
+    .period-label-start, .period-label-end
+    { 
+        margin-left: 0rem; 
+        font-size: 25px;
+    }
+
+    input[type=date]
+    { font-size: 15px; }    
 }
 
 @media (max-width: 350px)
 {
-    .title label, .title input[type=text]
+    .title input, .title textarea
     { 
-        font-size: 18px; 
+        font-size: 15px; 
         height: auto;
+    }
+
+    .title label
+    { font-size: 20px; }
+
+    .thumbnail-picker
+    { 
+        font-size: 15px; 
+        width: 200px;
     }
 }

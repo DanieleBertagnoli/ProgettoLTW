@@ -1,6 +1,6 @@
 <?php
     
-    require "Utility/initConnection.php";
+    require "Utility/PHP/initConnection.php";
     $connection = initConnection();
 
 ?>
@@ -10,7 +10,7 @@
 
     <head>
 
-        <meta charset="UTF-8">
+        <meta charsetb="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -72,7 +72,7 @@
 
         <div class="background-img">
 
-            <form class="general-container" action="Utility/insertNewTrip.php" method="POST" enctype="multipart/form-data">
+            <form class="general-container" action="Utility/PHP/insertNewTrip.php" method="POST" enctype="multipart/form-data" onsubmit="return checkForm();">
 
                 <h1 class="text-center mt-2">Crea un nuovo itinerario!</h1>
 
@@ -82,6 +82,16 @@
                     <label for="title">Titolo:</label>
                     <input type="text" name="title" id="title" placeholder="Inserire il titolo dell'itinerario" maxlength="30">
                 </div>
+
+                <div class="title">
+                    <label for="place">Luoghi visitati:</label>
+                    <textarea type="text" name="place" id="place" placeholder="Inserire i luoghi visitati" maxlength="190" rows="3"></textarea>
+                </div>
+
+                <input type="file" name="thumbnail" id="thumbnail" multiple="false" accept="image/png, image/jpg, image/jpeg">
+                <label class="thumbnail-picker" for="thumbnail" id="thumbnail-label">Seleziona un'immagine di copertina <i class="bi bi-images"></i></label>
+
+                <div class="alert alert-danger d-flex align-items-end alert-dismissible mt-5" id="errorMessage" style="visibility: hidden; width: fit-content; align-self: center;"></div> <!-- Div all'interno della quale viene inserito un messaggio di errore da check() -->
 
                 <div class="period" id="period-1">
 
@@ -98,11 +108,11 @@
                             </div>
                         </div>
 
-                        <input type="file" name="images-1" id="images-1" multiple="true" accept="image/png, image/jpg, image/jpeg">
-                        <label class="file-picker" for="images-1">Scegli immagini</label>
+                        <input type="file" name="images-1[]" id="images-1" multiple="true" accept="image/png, image/jpg, image/jpeg">
+                        <label class="file-picker" for="images-1" id="images-label-1"><i class="bi bi-plus pe-1"></i><i class="bi bi-images"></i></label>
                     </div>
 
-                    <textarea class="period-description" maxlength="250" placeholder="Descrivi le attività svolte durante questo periodo" name="description-1"></textarea>
+                    <textarea class="period-description" placeholder="Descrivi le attività svolte durante questo periodo" name="description-1" id="description-1"></textarea>
 
                 </div>
 
