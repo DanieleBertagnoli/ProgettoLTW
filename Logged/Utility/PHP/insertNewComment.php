@@ -3,17 +3,18 @@
     require "initConnection.php";
     $connection = initConnection();
 
-    if(!isset($_POST['comment-text']) || !isset($_POST['trip-id']) || !isset($_POST['timestamp']))
-    { echo ""; }
+    if(!isset($_GET['comment-text']) || !isset($_GET["tripID"]))
+    { echo "Errore nei parametri fra"; }
 
-    $username = $_SESSION['email'];
-    $tripID = $_POST['trip-id'];
-    $text = $_POST['comment-text'];
-    $timestamp = $_POST['timestamp'];
+    $username = $_GET['email'];
+    $tripID = $_GET['tripID'];
+    $text = $_GET['comment-text'];
+    
+    $currentDate = new DateTime();
 
-    $query = $connection -> prepare("INSERT INTO comments (USER, TEXT, TRIP, DATE) VALUES (?, ?, ?, ?)");
-    $query -> bind_param("ssis", $username, $text, $tripID, $user, $timestamp);
+    $currentDate = $currentDate -> format('Y-m-d H:i:s');
+    $query = $connection -> prepare('INSERT INTO comments (USER, TRIP, TEXT, DATETIME) VALUES (?, ?, ?, ?)');
+    $query -> bind_param("siss", $username, $tripID, $text, $currentDate);
     $result = $query -> execute();
 
-    header("Location: ../tripViewer.php?tripID=" . $tripID);
 ?>

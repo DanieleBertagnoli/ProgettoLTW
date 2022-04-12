@@ -1,4 +1,5 @@
 <?php
+
     require "Utility/PHP/initConnection.php";
     $connection = initConnection();
 
@@ -19,11 +20,91 @@
     if(count($rows) < $cellCount) //Ho meno itinerari nel DB di quante celle voglio creare
     { $cellCount = count($rows); } //Ne creo tante quanti sono gli itinerari
 
+    
+    /* CREATING THE CAROUSEL CELLS */
+
+    $trips = array();
+    $cookies = $_COOKIE['search'];
+    $cookies = explode("~(~~)~", $cookies);
+    for($y=count($cookies)-2; $y>=0; $y--)
+    {
+        $keywords = $cookies[$y];
+        $keywords = strtolower($keywords);
+
+        $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(title)=?");
+        $query -> bind_param("s", $keywords);
+        $query -> execute();
+        $result = $query -> get_result();
+
+        while($row = $result -> fetch_assoc())
+        { 
+            $in = false;
+            for($j=0; $j<count($trips); $j++)
+            {
+                if($trips[$j]['id'] == $row['id'])
+                { 
+                    $in = true; 
+                    break; 
+                }
+            }
+
+            if(!$in)
+            { $trips[] = $row; }
+        }
+
+        $splitKeywords = explode(" ", $keywords);
+
+        for($i=0; $i<count($splitKeywords); $i++)
+        {
+            $temp = "% ".$splitKeywords[$i]." %";
+            $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(keywords) LIKE ?");
+            $query -> bind_param("s", $temp);
+            $query -> execute();
+            $result = $query -> get_result();
+
+            while($row = $result -> fetch_assoc())
+            {     
+                $in = false;
+                for($j=0; $j<count($trips); $j++)
+                {
+                    if($trips[$j]['id'] == $row['id'])
+                    { 
+                        $in = true; 
+                        break; 
+                    }
+                }
+
+                if(!$in)
+                { $trips[] = $row; } 
+            }
+        }
+    }
+
+    for($i=0; $i<count($rows); $i++)
+    {
+        $row = $rows[$i];
+        $in = false;
+        for($j=0; $j<count($trips); $j++)
+        {
+            if($trips[$j]['id'] == $row['id'])
+            { 
+                $in = true; 
+                break; 
+            }
+        }
+
+        if(!$in)
+        { $trips[] = $row; }
+
+        if(count($trips) >= $cellCount)
+        { break; }
+    }
+
     for($i=0; $i<$cellCount; $i++)
     {
-        $carouselCells = $carouselCells . " " . "<a href=\"tripViewer.php?tripID=" . $rows[$i]['id'] . "\"><div class=\"carousel-cell\" style=\"background: linear-gradient(0deg, rgba(0,0,0,.2), rgba(0,0,0,.7)), 
-                                                    url('../TripImages/" . $rows[$i]['id'] . "/" . $rows[$i]['id'] . "-1') no-repeat center center; 
-                                                    background-size: cover; overflow: hidden;\">" . $rows[$i]['title'] . "</div></a>";
+        $carouselCells = $carouselCells . " " . "<a href=\"tripViewer.php?tripID=" . $trips[$i]['id'] . "\"><div class=\"carousel-cell\" style=\"background: linear-gradient(0deg, rgba(0,0,0,.2), rgba(0,0,0,.7)), 
+                                                    url('../TripImages/" . $trips[$i]['id'] . "/thumbnail') no-repeat center center; 
+                                                    background-size: cover; overflow: hidden;\">" . $trips[$i]['title'] . "</div></a>";
                 
     }
 

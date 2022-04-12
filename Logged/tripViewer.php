@@ -20,7 +20,23 @@
 
     $images = array(array());
 
-    //Break it up based on symbols.
+    $star = array();
+    $email = $_SESSION['email'];
+
+    $query = $connection -> prepare("SELECT * FROM votes WHERE user=? AND trip=?");
+    $query -> bind_param("si", $email, $id);
+    $query -> execute();
+    $result = $query -> get_result();
+    $row = $result -> fetch_assoc();
+    $userVote = $row['vote'];
+
+    for($i=1; $i<=5; $i++)
+    {
+        if($i > $userVote)
+        { $star[$i] = "&#9734"; }
+        else
+        { $star[$i] = "&#9733"; }
+    }
     
     mysqli_close($connection);
 ?>
@@ -44,12 +60,16 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/3.0.0/flickity.min.css" integrity="sha512-fJcFDOQo2+/Ke365m0NMCZt5uGYEWSxth3wg2i0dXu7A1jQfz9T4hdzz6nkzwmJdOdkcS8jmy2lWGaRXl+nFMQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <script src="../Bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="Utility/JS/tripViewerScript.js"></script>
 
         <title>HomePage</title>
 
     </head>
 
     <body>
+
+        <script>refreshVoteAvg(<?php echo "\"$id\"" ?>);</script> 
+        <script>reloadComments(<?php echo "\"$id\"" ?>);</script>
 
         <!-- API per il carousel -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/3.0.0/flickity.pkgd.min.js" integrity="sha512-achKCfKcYJg0u0J7UDJZbtrffUwtTLQMFSn28bDJ1Xl9DWkl/6VDT3LMfVTo09V51hmnjrrOTbtg4rEgg0QArA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -71,7 +91,7 @@
                     <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
 
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">Home</a> <!-- Link alla home -->
+                            <a class="nav-link" aria-current="page" href="homePage.php">Home</a> <!-- Link alla home -->
                         </li>
         
                         <li class="nav-item">
@@ -83,7 +103,7 @@
                     <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
 
                         <li class="nav-item">
-                            <a class="nav-link" href="Utility/logout.php" aria-disabled="true">Disconnettiti</a> <!-- Link alla pagina di logout -->
+                            <a class="nav-link" href="Utility/PHP/logout.php" aria-disabled="true">Disconnettiti</a> <!-- Link alla pagina di logout -->
                         </li>
 
                     </ul>
@@ -113,17 +133,44 @@
                     echo $carouselCells;
                     echo "</div>";
                     
-                    echo "<p class=\"my-label\">" . $descriptions[$i] . "</p>";
+                    echo "<p class=\"trip-description\">" . $descriptions[$i] . "</p>";
                     echo "</div>";
                 }
             ?>
 
-            <div class="comment-container">
-                <i class="bi bi-plus" style="font-size: 20px"></i>
-                <label>Ciao mondooooooooooooooooo</label>
-                <br><br><br><br><br><br><br><br><br><br>
-            </div>
+            <section name="star-section" class="star-container">
 
+                <div style="display: flex; align-items:center; margin-bottom: 30px; flex-wrap: wrap">
+
+                    <h2>Vota questo itinerario: </h2>
+
+                    <div>
+                        <button type="button" class="star" id="star-1" name="vote" value="1" onclick='return sendVote(1, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[1] ?> </button>
+                        <button type="button" class="star" id="star-2" name="vote" value="2" onclick='return sendVote(2, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[2] ?> </button>
+                        <button type="button" class="star" id="star-3" name="vote" value="3" onclick='return sendVote(3, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[3] ?> </button>
+                        <button type="button" class="star" id="star-4" name="vote" value="4" onclick='return sendVote(4, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[4] ?> </button>
+                        <button type="button" class="star" id="star-5" name="vote" value="5" onclick='return sendVote(5, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[5] ?> </button>
+                    </div>
+                </div> 
+
+                <h2 id="vote-avg">Gli utenti hanno votato: ?</h2>
+
+            </section>
+
+            <div class="comments-container">
+
+                <div class="comment-editor" id="comment-creator">
+                    <textarea id="comment-text" name="comment-text" class="comment-text" maxlength="500" placeholder="Inserisci un commento..." oninput='this.style.height="auto"; this.style.height = this.scrollHeight + "px"; checkButton()'></textarea>
+                    <button id="comment-button" class="plus-btn btn-disabled" onclick='return sendComment(<?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'>Commenta</button></i>
+                </div>
+
+                <div class="old-comments" id="old-comments">
+
+                </div>
+
+            </div>
         </div>
+
     </body>
+
 </html>

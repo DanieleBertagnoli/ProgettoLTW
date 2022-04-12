@@ -1,4 +1,4 @@
-<?php
+ <?php
 
     require "initConnection.php";
     $connection = initConnection();

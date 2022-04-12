@@ -13,7 +13,10 @@ function check()
     }
 
     if(!document.getElementById("password").value.match(/^[a-zA-Z0-9_\-\$@#!]{5,20}$/)) //Se la password non rispetta la regex
-    { errorMessage = "La password deve essere lunga dai 5 ai 20 caratteri, può contenere lettere, numeri, _ \- \$ @ # !"; }
+    { 
+        document.getElementById("password").style.borderColor = "rgba(200, 37, 37, 0.9)";
+        errorMessage = "La password deve essere lunga dai 5 ai 20 caratteri, può contenere lettere, numeri, _ \- \$ @ # !"; 
+    }
 
     if(document.getElementById("passwordRepeated").value == "") //Se la password ripetuta è vuota
     { 
@@ -21,10 +24,10 @@ function check()
         errorMessage = "Inserire la conferma della password"; 
     }
 
-    if(document.getElementById("username").value == "") //Se l'username è vuoto
-    { 
+    if(!document.getElementById("password").value.match(/^[a-zA-Z0-9_\-]{4,20}$/)) //Se la password non rispetta la regex
+    {
         document.getElementById("username").style.borderColor = "rgba(200, 37, 37, 0.9)";
-        errorMessage = "Inserire un username"; 
+        errorMessage = "Lo username deve essere lungo dai 4 ai 20 caratteri, può contenere lettere, numeri, _ \-"; 
     }
 
     if(document.getElementById("email").value == "") //Se l'email è vuota
