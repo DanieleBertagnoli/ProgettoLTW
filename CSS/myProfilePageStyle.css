@@ -1,0 +1,100 @@
+.general-container
+{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+}
+
+.profile-container
+{
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    align-self: center;
+    margin-top: 5rem;
+}
+
+.info-container
+{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin-left: 3rem;
+}
+
+.image-container
+{
+    display: flex;
+    flex-direction: column;
+    width: 500px; 
+    height: 500px;
+    background-size: cover;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.profile-separator
+{
+    margin-top: 0;
+    margin-bottom: 5rem;
+    width: 100;
+}
+
+.profile-label
+{
+    margin-bottom: 0;
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.profile-element
+{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding-bottom: 2px;
+}
+
+.btn-change
+{
+    width: fit-content;
+    border: none;
+    font-size: 16px; 
+    color: white;
+    border-radius: 60px;
+    padding: 6px 12px;
+    background-color: #164995;
+}
+
+.btn-image
+{
+    width: fit-content;
+    border: none;
+    font-size: 21px; 
+    color: white;
+    border-radius: 60px;
+    padding: 8px 20px;
+    background-color: #164995;
+    cursor: pointer;
+}
+
+#imageForm
+{
+    align-self: center;
+    margin-bottom: 10px;
+    margin-top: auto;
+    width: fit-content; 
+    height: fit-content;
+}
+
+.profile-element input[type="password"]
+{
+    width: 80%;
+    border: 1px solid;
+    border-color: gray;
+    border-radius: 40px;
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

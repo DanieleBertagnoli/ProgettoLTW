@@ -2,11 +2,31 @@
     require "Utility/PHP/initConnection.php";
     $connection = initConnection();
     
+    if(!$connection)
+    {
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di inserimento di un nuovo itinerario a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
+
     session_start();
-    
+
+    if(!isset($_GET['tripID']))
+    { 
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina dell'itinerario selezionato a causa di alcuni parametri mancanti nella richiesta. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
+
     $id = $_GET['tripID'];
+
     $query = $connection -> prepare("SELECT * FROM trip WHERE ID={$id}");
-    $query -> execute();
+    $success = $query -> execute();
+
+    if(!$success)
+    { 
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina dell'itinerario selezionato. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
+
     $result = $query -> get_result();
     $row = $result -> fetch_assoc();
 
@@ -25,7 +45,14 @@
 
     $query = $connection -> prepare("SELECT * FROM votes WHERE user=? AND trip=?");
     $query -> bind_param("si", $email, $id);
-    $query -> execute();
+    $success = $query -> execute();
+
+    if(!$success)
+    { 
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina dell'itinerario selezionato. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
+    
     $result = $query -> get_result();
     $row = $result -> fetch_assoc();
     $userVote = $row['vote'];
@@ -138,6 +165,8 @@
                 }
             ?>
 
+            <div class="alert alert-danger d-flex align-items-end alert-dismissible" id="vote-error" style="visibility: hidden;  width:90%; align-self:center;"></div> <!-- Div all'interno della quale viene inserito un messaggio di errore da check() -->
+
             <section name="star-section" class="star-container">
 
                 <div style="display: flex; align-items:center; margin-bottom: 30px; flex-wrap: wrap">
@@ -157,11 +186,13 @@
 
             </section>
 
+            <div class="alert alert-danger d-flex align-items-end alert-dismissible mb-5" id="comment-error" style="visibility: hidden; width:90%; align-self:center;"></div> <!-- Div all'interno della quale viene inserito un messaggio di errore da check() -->
+
             <div class="comments-container">
 
                 <div class="comment-editor" id="comment-creator">
                     <textarea id="comment-text" name="comment-text" class="comment-text" maxlength="500" placeholder="Inserisci un commento..." oninput='this.style.height="auto"; this.style.height = this.scrollHeight + "px"; checkButton()'></textarea>
-                    <button id="comment-button" class="plus-btn btn-disabled" onclick='return sendComment(<?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'>Commenta</button></i>
+                    <button id="comment-button" class="plus-btn btn-disabled" onclick='return sendComment(<?php echo "\"$id\"" ?>);'>Commenta</button></i>
                 </div>
 
                 <div class="old-comments" id="old-comments">

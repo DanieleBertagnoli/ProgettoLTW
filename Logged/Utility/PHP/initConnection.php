@@ -12,9 +12,6 @@
         $dbname = "ltw";
         $connection = mysqli_connect($host, $username, $psw, $dbname);
 
-        if(!$connection)
-        { echo "Errore durante la connesione: " . mysqli_connect_error(); }
-
         return $connection;
     }
 

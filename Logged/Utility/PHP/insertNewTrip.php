@@ -4,20 +4,33 @@
     $connection = initConnection();
 
     $query = $connection -> prepare("SELECT MAX(id) from trip");
-    $query -> execute();
+    $success = $query -> execute();
+
+    if(!$success || !$connection)
+    { 
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento del nuovo itinerario. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
+
     $nextId = ($query -> get_result() -> fetch_assoc())['MAX(id)'] + 1;
     $oldumask = umask(0);
     mkdir("../../../TripImages/{$nextId}", 0777);
     umask($oldumask);
 
-    $description = "";
+    if(!isset($_POST['place']) || !isset($_POST['title']) || !isset($_POST['period-num']))
+    { 
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento del nuovo itinerario, non sono presenti alcuni parametri necessari. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
     
-    $title = $_POST['title'];
     $user = $_SESSION['email'];
-    $visitedPlaces = $_POST['place'];
 
+    $visitedPlaces = $_POST['place'];
+    $title = $_POST['title'];
     $numPeriods = $_POST['period-num'];
+
     $imageCounter = 1;
+    $description = "";
 
     for($i = 1; $i <= $numPeriods; $i++)
     {
@@ -50,7 +63,7 @@
         }
     }
 
-    $thumbnail = $_FILES["thumnail"]['tmp_name'][0];
+    $thumbnail = $_FILES["thumbnail"]['tmp_name'][0];
     move_uploaded_file($thumbnail, "../../../TripImages/{$nextId}/thumbnail");
 
 
@@ -60,10 +73,14 @@
 
     $query = $connection -> prepare("INSERT INTO trip (ID, TITLE, DESCRIPTION, VISITED_PLACES, USER, KEYWORDS) VALUES (?, ?, ?, ?, ?, ?)");
     $query -> bind_param("isssss", $nextId, $title, $description, $visitedPlaces, $user, $keywords);
-    $result = $query -> execute();
+    $error = $query -> execute();
 
-    if($result)
-    { header("Location: ../../tripViewer.php?tripID=" . $nextId); }
+    if(!$error)
+    { 
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento del nuovo itinerario. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
     else
-    { echo "Errore durante il caricamento, riprova più tardi"; }
+    { header("Location: ../../tripViewer.php?tripID=" . $nextId); }
+
 ?>

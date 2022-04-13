@@ -16,6 +16,8 @@ function check()
 
     if(errorMessage != "") //Se c'è almeno un errore
     { 
+        if(document.getElementById("errorMessage") == null)
+        { document.getElementById("form").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible" id="errorMessage" style="visibility: hidden; height: fit-content"></div>'); }
         document.getElementById("generalContainerLogin").classList.add("error-login"); //Aggiungo la classe CSS error che permette di modificare la vh al general-container-login
         document.getElementById("errorMessage").style.visibility = "visible"; //Rendo visibile la div che contiene l'errore
         document.getElementById("errorMessage").innerHTML = "<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible()\'></button>"; //Aggiungo l'HTML interno alla div
@@ -26,4 +28,4 @@ function check()
 }
 
 function setInvisible()
-{ document.getElementById("errorMessage").style.visibility = "hidden"; } //Rendo invisibile la div dell'errore
+{ document.getElementById("errorMessage").remove(); } 

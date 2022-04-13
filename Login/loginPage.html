@@ -67,7 +67,7 @@
 
                 <div class="alert alert-danger d-flex align-items-end alert-dismissible" id="errorMessage" style="visibility: hidden;"></div> <!-- Div all'interno della quale viene inserito un messaggio di errore da check() -->
 
-                <form action="completeLogin.php" method="POST" class="form-container" onsubmit="return check();">
+                <form action="completeLogin.php" method="POST" class="form-container" id="form" onsubmit="return check();">
                             
                     <div class="mb-3">
                                 
@@ -79,7 +79,7 @@
                     <div class="mb-3">
                             
                         <label for="password" class="form-label">Password: </label>
-                        <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" maxlength="25">
                             
                     </div>
                             

@@ -1,14 +1,3 @@
-function addListeners() 
-{
-    document.getElementById("star-1").addEventListener("click", () => changeStarLevel(1));
-    document.getElementById("star-2").addEventListener("click", () => changeStarLevel(2));
-    document.getElementById("star-3").addEventListener("click", () => changeStarLevel(3));
-    document.getElementById("star-4").addEventListener("click", () => changeStarLevel(4));
-    document.getElementById("star-5").addEventListener("click", () => changeStarLevel(5));  
-
-    //document.getElementById("comment-button").addEventListener("click", () => addComment());
-}
-
 function changeStarLevel(lvl)
 {
     for(var i=1; i<=5; i++)
@@ -20,11 +9,23 @@ function changeStarLevel(lvl)
     }
 }
 
-function sendVote(vote, tripID, email)
+function sendVote(vote, tripID)
 {
     var httpRequest = new XMLHttpRequest();
-    httpRequest.open("GET", "./Utility/PHP/insertVote.php?tripID=" + tripID + "&email=" + email + "&vote=" + vote, true);
+    httpRequest.open("GET", "./Utility/PHP/insertVote.php?tripID=" + tripID + "&vote=" + vote, true);
     httpRequest.send(null);
+    httpRequest.onreadystatechange = () => 
+    { 
+        if(httpRequest.readyState == 4 && httpRequest.status == 500)
+        {  
+            var errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento del nuovo voto. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+            document.getElementById("vote-error").innerHTML = "<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"vote-error\")\'></button>"; //Aggiungo l'HTML interno alla div
+            document.getElementById("vote-error").style.visibility = "visible";
+        }
+
+        if(httpRequest.readyState == 4 && httpRequest.status == 200)
+        { changeStarLevel(vote); }
+    }
     refreshVoteAvg(tripID);
 }
 
@@ -40,6 +41,13 @@ function refreshVoteAvg(tripID)
             var newAvg = httpRequest.responseText; 
             document.getElementById("vote-avg").innerHTML = "Gli altri utenti hanno votato: " + newAvg + "/5"; 
         }
+
+        if(httpRequest.readyState == 4 && httpRequest.status == 500)
+        {  
+            var errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento dei voti. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+            document.getElementById("vote-error").innerHTML = "<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"vote-error\")\'></button>"; //Aggiungo l'HTML interno alla div
+            document.getElementById("vote-error").style.visibility = "visible";
+        }
     }
 }
 
@@ -52,15 +60,22 @@ function checkButton()
     { document.getElementById("comment-button").classList.remove("btn-disabled"); }
 }
 
-function sendComment(tripID, email)
+function sendComment(tripID)
 {
     var httpRequest = new XMLHttpRequest();
-    httpRequest.open("GET", "./Utility/PHP/insertNewComment.php?tripID=" + tripID + "&email=" + email + "&comment-text=" + document.getElementById("comment-text").value.trim(), true);
+    httpRequest.open("GET", "./Utility/PHP/insertNewComment.php?tripID=" + tripID + "&comment-text=" + document.getElementById("comment-text").value.trim(), true);
     httpRequest.send(null);
     httpRequest.onreadystatechange = () =>
     {
         if(httpRequest.readyState == 4 && httpRequest.status == 200)
         { reloadComments(tripID); }
+
+        if(httpRequest.readyState == 4 && httpRequest.status == 500)
+        {  
+            var errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento del nuovo commento. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+            document.getElementById("comment-error").innerHTML = "<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"comment-error\")\'></button>"; //Aggiungo l'HTML interno alla div
+            document.getElementById("comment-error").style.visibility = "visible";
+        }
     }
 
     //Remove content to avoid spamming the same comment.
@@ -96,7 +111,15 @@ function reloadComments(tripID)
             }
             document.getElementById("old-comments").innerHTML = allCommentsDiv;
         }
+
+        if(httpRequest.readyState == 4 && httpRequest.status == 500)
+        {  
+            var errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento dei commenti. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+            document.getElementById("comment-error").innerHTML = "<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"comment-error\")\'></button>"; //Aggiungo l'HTML interno alla div
+            document.getElementById("comment-error").style.visibility = "visible";
+        }
     }
 }
 
-window.addEventListener("load", addListeners);
+function setInvisible(element)
+{ document.getElementById(element).style.visibility = "hidden"; }

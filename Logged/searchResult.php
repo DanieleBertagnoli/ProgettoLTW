@@ -2,6 +2,12 @@
     require "Utility/PHP/initConnection.php";
     $connection = initConnection();
     
+    if(!$connection)
+    {
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di inserimento di un nuovo itinerario a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
+
     session_start();
 
     $keywords = $_POST["search-box"];
@@ -9,7 +15,14 @@
 
     $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(title)=?");
     $query -> bind_param("s", $keywords);
-    $query -> execute();
+    $success = $query -> execute();
+
+    if(!$success)
+    { 
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina con i risultati della ricerca. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
+
     $result = $query -> get_result();
 
     $trips = array();
@@ -24,7 +37,14 @@
         $temp = "% ".$splitKeywords[$i]." %";
         $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(keywords) LIKE ?");
         $query -> bind_param("s", $temp);
-        $query -> execute();
+        $success = $query -> execute();
+
+        if(!$success)
+        { 
+            $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina con i risultati della ricerca. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+            header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        }
+
         $result = $query -> get_result();
 
         while($row = $result -> fetch_assoc())

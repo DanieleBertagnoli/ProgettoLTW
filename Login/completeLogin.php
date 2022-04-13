@@ -13,15 +13,28 @@
     $connection = mysqli_connect($host, $username, $psw, $dbname);
 
     if(!$connection)
-    { echo "Errore durante la connesione: " . mysqli_connect_error(); }
+    { 
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di login a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage);     
+    }
 
     $query = $connection -> prepare("SELECT * FROM users WHERE EMAIL=?");
     $query -> bind_param("s", $email);
-    $query -> execute();
+    $success = $query -> execute();
+
+    if(!$success)
+    {
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di login a causa di un errore durante il procedimento. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
+        header("Location: errorPageLogin.php?errorMessage=" . $errorMessage . "&redirectPage=Login/loginPage.html");   
+    }
+
     $result = $query -> get_result();
     $row = $result -> fetch_assoc();
     if($row == 0 || !password_verify($password, $row['password']))
-    { echo "Attenzione non esiste nessun utente con queste credenziali, registrati: <a href='../Signup/signupPage.html'>Clicca qui</a>"; }
+    { 
+        $errorMessage = "Attenzione, non esiste nessun utente registrato con le credenziali inserite.";
+        header("Location: errorPageLogin.php?errorMessage=" . $errorMessage); 
+    }
     else
     {
         session_start();

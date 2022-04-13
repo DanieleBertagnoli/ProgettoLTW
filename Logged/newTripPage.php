@@ -3,6 +3,12 @@
     require "Utility/PHP/initConnection.php";
     $connection = initConnection();
 
+    if(!$connection)
+    {
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di inserimento di un nuovo itinerario a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
+
 ?>
 
 <!DOCTYPE html>

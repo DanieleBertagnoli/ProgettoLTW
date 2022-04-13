@@ -3,13 +3,26 @@
     require "Utility/PHP/initConnection.php";
     $connection = initConnection();
 
+    if(!$connection)
+    {
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
+
     session_start();
 
     $email = $_SESSION['email'];
     $username = $_SESSION['username'];
 
     $query = $connection -> prepare("SELECT * FROM trip");
-    $query -> execute();
+    $error = $query -> execute();
+
+    if(!$error)
+    { 
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
+
     $result = $query -> get_result();
 
     $rows = array();
@@ -33,7 +46,14 @@
 
         $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(title)=?");
         $query -> bind_param("s", $keywords);
-        $query -> execute();
+        $error = $query -> execute();
+
+        if(!$error)
+        { 
+            $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+            header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        }
+
         $result = $query -> get_result();
 
         while($row = $result -> fetch_assoc())
@@ -59,7 +79,14 @@
             $temp = "% ".$splitKeywords[$i]." %";
             $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(keywords) LIKE ?");
             $query -> bind_param("s", $temp);
-            $query -> execute();
+            $error = $query -> execute();
+
+            if(!$error)
+            { 
+                $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+                header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+            }
+
             $result = $query -> get_result();
 
             while($row = $result -> fetch_assoc())
@@ -171,6 +198,10 @@
                     </ul>
 
                     <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="myProfilePage.php" aria-disabled="true">Profilo</a> <!-- Link al profilo utente -->
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="Utility/PHP/logout.php" aria-disabled="true">Disconnettiti</a> <!-- Link alla pagina di logout -->

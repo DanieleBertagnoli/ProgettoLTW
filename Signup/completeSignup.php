@@ -9,13 +9,16 @@
     $dbname = "ltw";
     $connection = mysqli_connect($host, $username, $psw, $dbname);
 
+    if(!$connection)
+    { 
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di registrazione a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
+        header("Location: errorPageSignup.php?errorMessage=" . $errorMessage);     
+    }
+
     $email = $_POST['email'];
     $username = $_POST['username'];
     $password = $_POST['password'];
     $passwordRepetead = $_POST['passwordRepetead'];
-
-    if(!$connection)
-    { echo "Errore durante la connesione: " . mysqli_connect_error(); }
 
     $query = $connection -> prepare("SELECT * FROM users WHERE EMAIL=?");
     $query -> bind_param("s", $email);
@@ -23,17 +26,23 @@
     $result = $query -> get_result();
     $row = $result -> fetch_assoc();
     if($row != 0)
-    { echo "Attenzione l'utente con questa email risulta già registrato, effettua il login: <a href='../Login/loginPage.html'>Clicca qui</a>"; }
+    { 
+        $errorMessage = "Attenzione, l'email inserita risulta già registrata.";
+        header("Location: errorPageSignup.php?errorMessage=" . $errorMessage); 
+    }
     else
     {
         $password = password_hash($password, PASSWORD_DEFAULT);
-        $query = $connection -> prepare("INSERT INTO users (EMAIL, PASSWORD, USERNAME) VALUES (?,?,?)");
+        $query = $connection -> prepare('INSERT INTO users (EMAIL, PASSWORD, USERNAME) VALUES (?,?,?)');
         $query -> bind_param("sss", $email, $password, $username);
-        $result = $query -> execute();
-        if($result)
-        { echo "Registrazione avvenuta con successo, effettua il login: <a href='../Login/loginPage.html'>Clicca qui</a> "; }
+        $success = $query -> execute();
+        if($success)
+        { header("Location: successPage.html"); }
         else
-        { echo "Errore durante la registrazione, riprova più tardi"; }
+        {
+            $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di registrazione a causa di un errore durante l'inserimento dei dati nel database. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
+            header("Location: errorPageSignup.php?errorMessage=" . $errorMessage);    
+        }
     }
 
     mysqli_close($connection);
