@@ -8,7 +8,7 @@
 
     $tripID = $_GET['tripID'];
 
-    $query = $connection -> prepare('SELECT text, datetime, username FROM users, comments WHERE user = email AND trip=?');
+    $query = $connection -> prepare('SELECT text, datetime, username, user FROM users, comments WHERE user = email AND trip=?');
     $query -> bind_param("i", $tripID);
     $success = $query -> execute();
 
@@ -19,7 +19,7 @@
 
     $comments = "";
     while($row = $result -> fetch_assoc())
-    { $comments = $comments . $row['username'] . "~(~~)~" . $row['datetime'] . "~(~~)~" . $row['text'] . "~(~~)~"; }
+    { $comments = $comments . $row['user'] . "~(~~)~" . $row['datetime'] . "~(~~)~" . $row['text'] . "~(~~)~" . $row['username'] . "~(~~)~"; }
     echo $comments;
 
 ?>

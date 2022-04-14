@@ -7,7 +7,7 @@
 
     $email = $_SESSION['email'];
 
-    $query = $connection -> prepare('SELECT username FROM `users` WHERE email=?');
+    $query = $connection -> prepare('SELECT username, gender, birthday, country FROM `users` WHERE email=?');
     $query -> bind_param("s", $email);
     $success = $query -> execute();
 
@@ -17,12 +17,22 @@
         header("Location: errorPage.php?errorMessage=" . $errorMessage); 
     }
 
-    $username = $query -> get_result() -> fetch_assoc()['username'];
-    $profilePic = "../ProfilePics/" . $email;
+    $row = $query -> get_result() -> fetch_assoc();
+    $username = $row['username'];
 
-    $country = "N/S";
-    $dateOfBirth = null;
-    $gender = "N/S";
+    $birthDay = $row['birthday'];
+    if($birthDay == "0000-00-00")
+    { $birthDay = "N/S"; }
+
+    $gender = $row['gender'];
+    if($gender == "")
+    { $gender = "N/S"; }
+
+    $country = $row['country'];
+    if($country == "")
+    { $country = "N/S"; }
+
+    $profilePic = "../ProfilePics/" . $email;
 
 ?>
 
@@ -36,7 +46,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" href="../Bootstrap/bootstrap.css">
-        <link rel="stylesheet" href="../CSS/myProfilePageStyle.css">
+        <link rel="stylesheet" href="../CSS/myProfileStyle.css">
         
         <!-- CSS icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
@@ -53,6 +63,9 @@
         <!-- API per il carousel -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/3.0.0/flickity.pkgd.min.js" integrity="sha512-achKCfKcYJg0u0J7UDJZbtrffUwtTLQMFSn28bDJ1Xl9DWkl/6VDT3LMfVTo09V51hmnjrrOTbtg4rEgg0QArA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+        <!-- Jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
         <!-- Navigation bar -->
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -67,10 +80,10 @@
     
                 <div class="collapse navbar-collapse" id="navbarScroll">
       
-                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
-                            <a class="nav-link" aria-disabled="true" href="homePage.php">Home</a> <!-- Link alla home -->
+                            <a class="nav-link" aria-current="page" href="homePage.php">Home</a> <!-- Link alla home -->
                         </li>
         
                         <li class="nav-item">
@@ -79,10 +92,18 @@
         
                     </ul>
 
-                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
-                            <a class="nav-link active" href="" aria-current="page">Profilo</a> <!-- Link al profilo utente -->
+                            <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> 
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="myProfilePage.php" aria-disabled="true">Profilo</a> <!-- Link al profilo utente -->
                         </li>
 
                         <li class="nav-item">
@@ -90,26 +111,23 @@
                         </li>
 
                     </ul>
-
                 </div>
             </div>
         </nav>
-
-        <!-- 
-            TODO:
-            Immagine tonda.
-
-        -->
 
         <div class="general-container">
 
             <div class="profile-container">
 
-                <div class="image-container" style='background: url("<?php echo $profilePic; ?>") no-repeat center center; background-size: cover; overflow: hidden;'>
+                <div class="image-container">
+
+                    <img class="profile-pic" src="<?php echo $profilePic; ?>" alt="">
+
                     <form action="Utility/PHP/updateProfilePic.php" method="POST" id="imageForm" enctype="multipart/form-data">
                         <label class="btn-image" for="imagePicker">Cambia Immagine</label>
-                        <input style="visibility: hidden; height: 0px; width: 0px;" type="file" name="imagePicker[]" id="imagePicker" accept="image/png, image/jpg, image/jpeg" onchange=''>
+                        <input style="visibility: hidden; height: 0px; width: 0px;" type="file" name="imagePicker[]" id="imagePicker" accept="image/png, image/jpg, image/jpeg" onchange='document.getElementById("imageForm").submit()'>
                     </form>
+
                 </div> 
 
                 <div class="info-container">
@@ -121,26 +139,40 @@
 
                     <div class="profile-element" id="passwordElement">
 
-                        <div class="d-flex"> 
-                            <p class="profile-label">Password: ******** </p>
-                            <button class="btn-change ms-3" onclick="changePassword()">Cambia password</button>
-                        </div>
+                        <p class="profile-label">Password: ******** </p>
+                        <button class="btn-change ms-3" onclick="changePassword()">Cambia password</button>
 
                     </div>       
 
                     <hr class="profile-separator">
+                    
+                    <div class="profile-element" id="genderElement">
 
-                    <div class="profile-element">
                         <p class="profile-label">Genere: <?php echo $gender; ?> </p>
+                        <button class="btn-change ms-3" onclick='changeGender(<?php echo "\"$gender\""; ?>)'>Cambia</button>
 
-                        <!-- <button class="btn-change" onclick="">Cambia gender</buton> -->
                     </div>
-                    <hr class="profile-element">
 
-                    <div class="profle-element">
-                        <p class="profile-label">Nazionalita': <?php echo $country; ?> </p>
+                    <hr class="profile-separator">
+
+                    <div class="profile-element" id="countryElement">
+
+                        <p class="profile-label">Nazione: <?php echo $country; ?> </p>
+                        <button class='btn-change ms-3' onclick='changeCountry(<?php echo "\"$country\"" ?>)'>Cambia</button>
+
                     </div>
-                    <hr class="profile-element">
+
+                    <hr class="profile-separator">
+
+                    <div class="profile-element" id="dateElement">
+
+                        <p class="profile-label">Data di nascita: <?php echo $birthDay; ?> </p>
+                        <button class='btn-change ms-3' onclick='changeDate(<?php echo "\"$birthDay\"" ?>)'>Cambia</button>
+
+                    </div>
+                    
+                    <hr class="profile-separator">
+
                 </div>
 
             </div>

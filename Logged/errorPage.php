@@ -49,7 +49,7 @@
     
                 <div class="collapse navbar-collapse" id="navbarScroll">
       
-                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="homePage.php">Home</a> <!-- Link alla home -->
@@ -61,7 +61,15 @@
         
                     </ul>
 
-                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> 
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="myProfilePage.php" aria-disabled="true">Profilo</a> <!-- Link al profilo utente -->
@@ -72,7 +80,6 @@
                         </li>
 
                     </ul>
-
                 </div>
             </div>
         </nav>

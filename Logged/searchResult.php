@@ -2,7 +2,7 @@
     require "Utility/PHP/initConnection.php";
     $connection = initConnection();
     
-    if(!$connection)
+    if(!$connection || !isset($_POST['searchBox']))
     {
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di inserimento di un nuovo itinerario a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
         header("Location: errorPage.php?errorMessage=" . $errorMessage); 
@@ -10,7 +10,7 @@
 
     session_start();
 
-    $keywords = $_POST["search-box"];
+    $keywords = $_POST["searchBox"];
     $keywords = strtolower($keywords);
 
     $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(title)=?");
@@ -35,8 +35,11 @@
     for($i=0; $i<count($splitKeywords); $i++)
     {
         $temp = "% ".$splitKeywords[$i]." %";
-        $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(keywords) LIKE ?");
-        $query -> bind_param("s", $temp);
+        $temp2 = "%,".$splitKeywords[$i].",%";
+        $temp3 = "%,".$splitKeywords[$i]." %";
+        $temp4 = "% ".$splitKeywords[$i].",%";
+        $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(keywords) LIKE ? OR LOWER(visited_places) LIKE ? OR LOWER(visited_places) LIKE ? OR LOWER(visited_places) LIKE ? OR LOWER(visited_places) LIKE ?");
+        $query -> bind_param("sssss", $temp, $temp, $temp2, $temp3, $temp4);
         $success = $query -> execute();
 
         if(!$success)
@@ -113,7 +116,7 @@
     
                 <div class="collapse navbar-collapse" id="navbarScroll">
       
-                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="homePage.php">Home</a> <!-- Link alla home -->
@@ -125,7 +128,19 @@
         
                     </ul>
 
-                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> 
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="myProfilePage.php" aria-disabled="true">Profilo</a> <!-- Link al profilo utente -->
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="Utility/PHP/logout.php" aria-disabled="true">Disconnettiti</a> <!-- Link alla pagina di logout -->

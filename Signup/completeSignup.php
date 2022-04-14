@@ -33,7 +33,7 @@
     else
     {
         $password = password_hash($password, PASSWORD_DEFAULT);
-        $query = $connection -> prepare('INSERT INTO users (EMAIL, PASSWORD, USERNAME) VALUES (?,?,?)');
+        $query = $connection -> prepare('INSERT INTO users (EMAIL, PASSWORD, USERNAME, PRIVACY) VALUES (?,?,?,1)');
         $query -> bind_param("sss", $email, $password, $username);
         $success = $query -> execute();
         if($success)

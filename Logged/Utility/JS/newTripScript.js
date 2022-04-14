@@ -1,6 +1,6 @@
 function addPeriod()
 {
-    var newPeriodID = "period-" + (periodsLen+1);
+    var newPeriodID = "period" + (periodsLen+1);
     periods[periodsLen] = newPeriodID;
     periodsLen++;
     
@@ -13,12 +13,12 @@ function addPeriod()
         count--;
     }
 
-    var newPeriod = '<div class="period" id="' + newPeriodID + '"><div class="top-elements"><div class="date-elements"><div><label class="period-label-start" for="start">Da: </label><input type="date" name="start-' + periodsLen + '" id="start-' + periodsLen + '"></div><div><label class="period-label-end" for="end">A: </label><input type="date" name="end-' + periodsLen + '" id="end-' + periodsLen + '"></div></div><input type="file" name="images-' + periodsLen + '[]" id="images-' + periodsLen + '" multiple="true" accept="image/png, image/jpg, image/jpeg"><label class="file-picker" for="images-' + periodsLen + '" id="images-label-' + periodsLen + '"><i class="bi bi-plus pe-1"></i><i class="bi bi-images"></i></label></div> <textarea class="period-description" placeholder="Descrivi le attività svolte durante questo periodo" name="description-' + periodsLen +'" id="description' + periodsLen + '"></textarea><button class="btn-trash" type="button" id="btn-trash-' + newPeriodID + '"><i class="bi bi-trash"></i></button></div>';
+    var newPeriod = '<div class="period" id="' + newPeriodID + '"><div class="top-elements"><div class="date-elements"><div><label class="period-label-start" for="start' + periodsLen + '">Da: </label><input type="date" name="start' + periodsLen + '" id="start' + periodsLen + '"></div><div><label class="period-label-end" for="end' + periodsLen + '">A: </label><input type="date" name="end' + periodsLen + '" id="end' + periodsLen + '"></div></div><input type="file" name="images' + periodsLen + '[]" id="images' + periodsLen + '" multiple="true" accept="image/png, image/jpg, image/jpeg"><label class="file-picker" for="images' + periodsLen + '" id="imagesLabel' + periodsLen + '"><i class="bi bi-plus pe-1"></i><i class="bi bi-images"></i></label></div> <textarea class="period-description" placeholder="Descrivi le attività svolte durante questo periodo" name="description' + periodsLen +'" id="description' + periodsLen + '"></textarea><button class="btn-trash" type="button" id="btnTrash' + periodsLen + '"><i class="bi bi-trash"></i></button></div>';
 
     lastPeriod.insertAdjacentHTML("afterend", newPeriod);
-    document.getElementById("btn-trash-" + newPeriodID).addEventListener("click", () => removePeriod(newPeriodID));
-    document.getElementById("period-num").value = periodsLen;
-    document.getElementById("images-" + periodsLen).addEventListener("change", () => changeLabel("images-" + periodsLen, "images-label-" + periodsLen));
+    $("#periodNum").val(periodsLen);
+    $("#btnTrash" + periodsLen).click(() => removePeriod(newPeriodID));
+    $("#images" + periodsLen).change(() => changeLabel("images" + periodsLen, "imagesLabel" + periodsLen));
 }
 
 function removePeriod(id)
@@ -27,31 +27,31 @@ function removePeriod(id)
 function changeLabel(id, idLabel)
 { 
     var numFiles = document.getElementById(id).files.length;
-    document.getElementById(idLabel).innerHTML = numFiles + ' <i class="bi bi-images"></i>'; 
+    $("#" + idLabel).html(numFiles + ' <i class="bi bi-images"></i>'); 
 }
 
 function init()
 { 
-    periods = ["period-1"]; 
-    document.getElementById("images-1").addEventListener("change", () => changeLabel("images-1", "images-label-1"));
+    periods = ["period1"]; 
+    $("#images1").change(() => changeLabel("images1", "imagesLabel1"));
 }
 
 function checkForm()
 {
-    if(!document.getElementById("title").value.match(/^[a-zA-Z0-9 ]{5,45}$/)) //Se il titolo non rispetta la regex
+    if(!$("#title").val().match(/^[a-zA-Z0-9 ]{5,45}$/)) //Se il titolo non rispetta la regex
     { 
         var errorMessage = "Il titolo deve essere lungo dai 5 ai 45 caratteri, può contenere lettere e numeri"; 
-        document.getElementById("title").style.borderColor = "rgba(200, 37, 37, 0.9)";
-        document.getElementById("title").style.borderWidth = "2px";
+        $("#title").css("border-color", "rgba(200, 37, 37, 0.9)");
+        $("#title").css("border-width", "2px");
         setError(errorMessage);
         return false;
     }
 
-    if(document.getElementById("place").value == "") //Se non è stato inserito un luogo
+    if($("#place").val() == "") //Se non è stato inserito un luogo
     { 
         var errorMessage = "Inserire almeno un luogo"; 
-        document.getElementById("place").style.borderColor = "rgba(200, 37, 37, 0.9)";
-        document.getElementById("place").style.borderWidth = "2px";
+        $("#place").css("border-color", "rgba(200, 37, 37, 0.9)");
+        $("#place").css("border-width", "2px");
         setError(errorMessage);
         return false;
     }
@@ -59,8 +59,6 @@ function checkForm()
     if(document.getElementById("thumbnail").files.length == 0) //Se non è stata selezionata un'immagine di copertina
     { 
         var errorMessage = "Inserire almeno l'immagine di copertina"; 
-        document.getElementById("place").style.borderColor = "rgba(200, 37, 37, 0.9)";
-        document.getElementById("place").style.borderWidth = "2px";
         setError(errorMessage);
         return false;
     }
@@ -71,40 +69,40 @@ function checkForm()
         if(period == null)
         { continue; }
 
-        if(document.getElementById("start-" + (i+1)).value == "") //Se il campo data start-i è vuoto
+        if($("#start" + (i+1)).val() == "") //Se il campo data start-i è vuoto
         { 
             var errorMessage = "Aggiungere la data di inizio"; 
-            document.getElementById("start-" + (i+1)).style.borderColor = "rgba(200, 37, 37, 0.9)";
-            document.getElementById("start-" + (i+1)).style.borderWidth = "2px";
+            $("#start" + (i+1)).css("border-color", "rgba(200, 37, 37, 0.9)");
+            $("#start" + (i+1)).css("border-width", "2px");
             setError(errorMessage);
             return false;
         }
 
-        if(document.getElementById("end-" + (i+1)).value == "") //Se il campo data end-i è vuoto
+        if($("#end" + (i+1)).val() == "") //Se il campo data end-i è vuoto
         { 
             var errorMessage = "Aggiungere la data di fine"; 
-            document.getElementById("end-" + (i+1)).style.borderColor = "rgba(200, 37, 37, 0.9)";
-            document.getElementById("end-" + (i+1)).style.borderWidth = "2px";
+            $("#end" + (i+1)).css("border-color", "rgba(200, 37, 37, 0.9)");
+            $("#end" + (i+1)).css("border-width", "2px");
             setError(errorMessage);
             return false;
         }
 
-        if(document.getElementById("end-" + (i+1)).value < document.getElementById("start-" + (i+1)).value) //Se la data di fine è minore della data di inizio
+        if($("#end" + (i+1)).val() < $("#start" + (i+1)).val()) //Se la data di fine è minore della data di inizio
         { 
             var errorMessage = "Le data di fine periodo deve essere successiva alla data di inizio periodo"; 
-            document.getElementById("end-" + (i+1)).style.borderColor = "rgba(200, 37, 37, 0.9)";
-            document.getElementById("end-" + (i+1)).style.borderWidth = "2px";
-            document.getElementById("start-" + (i+1)).style.borderColor = "rgba(200, 37, 37, 0.9)";
-            document.getElementById("start-" + (i+1)).style.borderWidth = "2px";
+            $("#end" + (i+1)).css("border-color", "rgba(200, 37, 37, 0.9)");
+            $("#end" + (i+1)).css("border-width", "2px");
+            $("#start" + (i+1)).css("border-color", "rgba(200, 37, 37, 0.9)");
+            $("#start" + (i+1)).css("border-width", "2px");
             setError(errorMessage);
             return false;
         }
 
-        if(document.getElementById("description-" + (i+1)).value == "") //Se il campo descrizione description-i è vuoto
+        if($("#description" + (i+1)).val() == "") //Se il campo descrizione description-i è vuoto
         { 
             var errorMessage = "Aggiungere la descrizione"; 
-            document.getElementById("description-" + (i+1)).style.borderColor = "rgba(200, 37, 37, 0.9)";
-            document.getElementById("description-" + (i+1)).style.borderWidth = "2px";
+            $("#description" + (i+1)).css("border-color", "rgba(200, 37, 37, 0.9)");
+            $("#description" + (i+1)).css("border-width", "2px");
             setError(errorMessage);
             return false;
         }
@@ -115,12 +113,13 @@ function checkForm()
 
 function setError(errorMessage)
 {
-    document.getElementById("errorMessage").style.visibility = "visible"; //Rendo visibile la div che contiene l'errore
-    document.getElementById("errorMessage").innerHTML = "<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible()\'></button>"; //Aggiungo l'HTML interno alla div
+    if(document.getElementById("errorMessage") == null)
+    { document.getElementById("period1").insertAdjacentHTML("beforebegin",'<div class="alert alert-danger d-flex align-items-end alert-dismissible mt-5" id="errorMessage" style="width: fit-content; align-self: center;"></div>'); }
+    $("#errorMessage").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible()\'></button>"); //Aggiungo l'HTML interno alla div
 }
 
 function setInvisible()
-{ document.getElementById("errorMessage").style.visibility = "hidden"; } //Rendo invisibile la div dell'errore
+{ $("#errorMessage").remove(); } //Rendo invisibile la div dell'errore
 
 var periods = [];
 var periodsLen = 1;

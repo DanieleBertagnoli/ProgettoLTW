@@ -156,7 +156,7 @@
         <!-- CSS base per il carousel -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/3.0.0/flickity.min.css" integrity="sha512-fJcFDOQo2+/Ke365m0NMCZt5uGYEWSxth3wg2i0dXu7A1jQfz9T4hdzz6nkzwmJdOdkcS8jmy2lWGaRXl+nFMQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        <script src="../Bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="../Bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="Utility/JS/homeScript.js"></script>
 
         <!-- API per lo scroll reveal -->
@@ -170,6 +170,9 @@
 
         <!-- API per il carousel -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/3.0.0/flickity.pkgd.min.js" integrity="sha512-achKCfKcYJg0u0J7UDJZbtrffUwtTLQMFSn28bDJ1Xl9DWkl/6VDT3LMfVTo09V51hmnjrrOTbtg4rEgg0QArA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <!-- Jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
         <!-- Navigation bar -->
 
@@ -200,6 +203,14 @@
                     <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
 
                         <li class="nav-item">
+                            <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> 
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link" href="myProfilePage.php" aria-disabled="true">Profilo</a> <!-- Link al profilo utente -->
                         </li>
 
@@ -221,8 +232,8 @@
 
                 <a href="newTripPage.php"><button class="btn-add">Crea itinerario</button></a> <!-- Bottone per creare un nuovo itinerario -->
 
-                <form id="search-form" class="search-form" action="searchResult.php" method="POST" onsubmit="return checkForm();"> <!-- Form per la ricerca di itinerari -->
-                    <input id="search-box" name="search-box" class="search-box" type="text" placeholder="Cerca un itinerario...">
+                <form id="searchForm" class="search-form" action="searchResult.php" method="POST" onsubmit="return checkForm();"> <!-- Form per la ricerca di itinerari -->
+                    <input id="searchBox" name="searchBox" class="search-box" type="text" placeholder="Cerca un itinerario...">
                     <button class="btn-search" type="submit"><i class="bi bi-search"></i></button>
                 </form>
 
@@ -264,12 +275,9 @@
 
         </section>
 
-        <!-- Jquery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-
         <script>
 
-            $( document ).ready(function()  //Quando il documento è caricato, viene applicata la ScrollReveal
+            $(document).ready(function()  //Quando il documento è caricato, viene applicata la ScrollReveal
             { ScrollReveal().reveal('.reveal', {distance: '100px', duration: 1500, easing: 'cubic-bezier(.215, .61, .355, 1)', interval: 600}); });
 
         </script>

@@ -1,0 +1,91 @@
+.general-container
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 90%;
+    height: fit-content;
+    margin-left: 5%;
+    margin-right: 5%;
+    justify-content: space-around;
+    margin-top: 4rem;
+}
+
+.user
+{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: fit-content;
+    flex-wrap: wrap;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    -webkit-box-shadow: 0px 0px 37px 4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 37px 4px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 37px 4px rgba(0,0,0,0.75);
+    border-radius: 30px;
+}
+
+a
+{ text-decoration: none; }
+
+a:hover
+{ color: white; }
+
+.user-img
+{ 
+    border-radius: 30px;
+    width: 100%; 
+}
+
+.btn-container
+{
+    display: flex;
+    width: 100%;
+    margin-top: 1rem;
+    font-size: 20px;
+    align-self: center;
+    margin-bottom: 1rem;
+}
+
+.btn-accept, .btn-refuse, .btn-profile
+{
+    width: fit-content;
+    border: none;
+    border-radius: 60px;
+    color: white;
+    padding: 8px 17px;
+    background-color: #164995;
+}
+
+.btn-accept
+{ 
+    margin-left: 1rem; 
+    margin-right: auto;
+}
+
+.btn-profile
+{ align-self: center; }
+
+.btn-refuse
+{
+    margin-left: auto;
+    margin-right: 1rem;
+}
+
+@media (max-width: 450px)
+{
+    .btn-container
+    {
+        margin-top: 0px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-accept, .btn-refuse, .btn-profile
+    { 
+        margin-left: 0px; 
+        margin-right: 0px;
+        margin-top: 1rem;
+    }
+}

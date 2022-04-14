@@ -95,11 +95,14 @@
 
     <body>
 
-        <script>refreshVoteAvg(<?php echo "\"$id\"" ?>);</script> 
-        <script>reloadComments(<?php echo "\"$id\"" ?>);</script>
-
         <!-- API per il carousel -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/3.0.0/flickity.pkgd.min.js" integrity="sha512-achKCfKcYJg0u0J7UDJZbtrffUwtTLQMFSn28bDJ1Xl9DWkl/6VDT3LMfVTo09V51hmnjrrOTbtg4rEgg0QArA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <!-- Jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <script>$(document).ready(function (){refreshVoteAvg(<?php echo "\"$id\"" ?>);});</script> 
+        <script>$(document).ready(function() {reloadComments(<?php echo "\"$id\"" ?>);});</script>
 
         <!-- Navigation bar -->
 
@@ -115,7 +118,7 @@
     
                 <div class="collapse navbar-collapse" id="navbarScroll">
       
-                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="homePage.php">Home</a> <!-- Link alla home -->
@@ -127,7 +130,19 @@
         
                     </ul>
 
-                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> 
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="myProfilePage.php" aria-disabled="true">Profilo</a> <!-- Link al profilo utente -->
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="Utility/PHP/logout.php" aria-disabled="true">Disconnettiti</a> <!-- Link alla pagina di logout -->
@@ -137,21 +152,20 @@
                 </div>
             </div>
         </nav>
-
         <div class="general-container">
             <h1 class="text-center" style="padding-bottom: 2rem"> <?php echo $title; ?> </h1>
             <?php
                 for($i = 1; $i <= $numPeriods; $i++)
                 {
-                    
+                    $carouselCells = "";
                     while(true)
                     {
                         $currentImage = "../TripImages/" . $id . "/period-" . $i . "/" . $id . "-" . $counter;
                         if(!is_file($currentImage))
                         { break; }
                         $counter = $counter + 1;
-                        $carouselCells = $carouselCells . " " . "<div class=\"carousel-cell\" style=\"background: url('" . $currentImage . "') no-repeat center center; 
-                        background-size: 100% 100%; overflow: hidden;\"></div>";
+                        $carouselCells = $carouselCells . " " . "<div id=\"carouselCell-" . $counter . "\" class=\"carousel-cell\" onclick=\"openPopup(" . $counter . ")\" style=\"name: ciao; background: url('" . $currentImage . "') no-repeat center center; 
+                        background-size: cover; overflow: hidden;\"></div>";
                     }
                     
                     echo "<div class=\"view-container\">";
@@ -165,7 +179,12 @@
                 }
             ?>
 
-            <div class="alert alert-danger d-flex align-items-end alert-dismissible" id="vote-error" style="visibility: hidden;  width:90%; align-self:center;"></div> <!-- Div all'interno della quale viene inserito un messaggio di errore da check() -->
+            <div id="myPopup" class="popup">
+              <span class="close" onclick="closePopup()">&times;</span>
+              <img class="img-popup" id="bigImage">
+            </div>
+
+            <div class="alert alert-danger d-flex align-items-end alert-dismissible" id="voteError" style="visibility: hidden;  width:90%; align-self:center;"></div> <!-- Div all'interno della quale viene inserito un messaggio di errore da check() -->
 
             <section name="star-section" class="star-container">
 
@@ -174,28 +193,28 @@
                     <h2>Vota questo itinerario: </h2>
 
                     <div>
-                        <button type="button" class="star" id="star-1" name="vote" value="1" onclick='return sendVote(1, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[1] ?> </button>
-                        <button type="button" class="star" id="star-2" name="vote" value="2" onclick='return sendVote(2, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[2] ?> </button>
-                        <button type="button" class="star" id="star-3" name="vote" value="3" onclick='return sendVote(3, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[3] ?> </button>
-                        <button type="button" class="star" id="star-4" name="vote" value="4" onclick='return sendVote(4, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[4] ?> </button>
-                        <button type="button" class="star" id="star-5" name="vote" value="5" onclick='return sendVote(5, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[5] ?> </button>
+                        <button type="button" class="star" id="star1" name="vote" value="1" onclick='return sendVote(1, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[1] ?> </button>
+                        <button type="button" class="star" id="star2" name="vote" value="2" onclick='return sendVote(2, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[2] ?> </button>
+                        <button type="button" class="star" id="star3" name="vote" value="3" onclick='return sendVote(3, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[3] ?> </button>
+                        <button type="button" class="star" id="star4" name="vote" value="4" onclick='return sendVote(4, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[4] ?> </button>
+                        <button type="button" class="star" id="star5" name="vote" value="5" onclick='return sendVote(5, <?php echo "\"$id\"" ?>, <?php echo "\"$email\"" ?>);'> <?php echo $star[5] ?> </button>
                     </div>
                 </div> 
 
-                <h2 id="vote-avg">Gli utenti hanno votato: ?</h2>
+                <h2 id="voteAvg">Gli utenti hanno votato: ?</h2>
 
             </section>
 
-            <div class="alert alert-danger d-flex align-items-end alert-dismissible mb-5" id="comment-error" style="visibility: hidden; width:90%; align-self:center;"></div> <!-- Div all'interno della quale viene inserito un messaggio di errore da check() -->
+            <div class="alert alert-danger d-flex align-items-end alert-dismissible mb-5" id="commentError" style="visibility: hidden; width:90%; align-self:center;"></div> <!-- Div all'interno della quale viene inserito un messaggio di errore da check() -->
 
             <div class="comments-container">
 
-                <div class="comment-editor" id="comment-creator">
-                    <textarea id="comment-text" name="comment-text" class="comment-text" maxlength="500" placeholder="Inserisci un commento..." oninput='this.style.height="auto"; this.style.height = this.scrollHeight + "px"; checkButton()'></textarea>
-                    <button id="comment-button" class="plus-btn btn-disabled" onclick='return sendComment(<?php echo "\"$id\"" ?>);'>Commenta</button></i>
+                <div class="comment-editor" id="commentCreator">
+                    <textarea id="commentText" name="comment-text" class="comment-text" maxlength="500" placeholder="Inserisci un commento..." oninput='this.style.height="auto"; this.style.height = this.scrollHeight + "px"; checkButton()'></textarea>
+                    <button id="commentButton" class="plus-btn btn-disabled" onclick='return sendComment(<?php echo "\"$id\"" ?>);'>Commenta</button></i>
                 </div>
 
-                <div class="old-comments" id="old-comments">
+                <div class="old-comments" id="oldComments">
 
                 </div>
 

@@ -38,6 +38,9 @@
         <!-- API per il carousel -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/3.0.0/flickity.pkgd.min.js" integrity="sha512-achKCfKcYJg0u0J7UDJZbtrffUwtTLQMFSn28bDJ1Xl9DWkl/6VDT3LMfVTo09V51hmnjrrOTbtg4rEgg0QArA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+        <!-- Jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
         <!-- Navigation bar -->
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -52,7 +55,7 @@
     
                 <div class="collapse navbar-collapse" id="navbarScroll">
       
-                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="homePage.php">Home</a> <!-- Link alla home -->
@@ -64,14 +67,25 @@
         
                     </ul>
 
-                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
-                            <a class="nav-link" href="Utility/logout.php" aria-disabled="true">Disconnettiti</a> <!-- Link alla pagina di logout -->
+                            <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> 
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="myProfilePage.php" aria-disabled="true">Profilo</a> <!-- Link al profilo utente -->
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="Utility/PHP/logout.php" aria-disabled="true">Disconnettiti</a> <!-- Link alla pagina di logout -->
                         </li>
 
                     </ul>
-
                 </div>
             </div>
         </nav>
@@ -82,7 +96,7 @@
 
                 <h1 class="text-center mt-2">Crea un nuovo itinerario!</h1>
 
-                <input type="hidden" name="period-num" value="1" id="period-num">
+                <input type="hidden" name="periodNum" value="1" id="periodNum">
 
                 <div class="title">
                     <label for="title">Titolo:</label>
@@ -95,30 +109,28 @@
                 </div>
 
                 <input type="file" name="thumbnail" id="thumbnail" multiple="false" accept="image/png, image/jpg, image/jpeg">
-                <label class="thumbnail-picker" for="thumbnail" id="thumbnail-label">Seleziona un'immagine di copertina <i class="bi bi-images"></i></label>
+                <label class="thumbnail-picker" for="thumbnail" id="thumbnailLabel">Seleziona un'immagine di copertina <i class="bi bi-images"></i></label>
 
-                <div class="alert alert-danger d-flex align-items-end alert-dismissible mt-5" id="errorMessage" style="visibility: hidden; width: fit-content; align-self: center;"></div> <!-- Div all'interno della quale viene inserito un messaggio di errore da check() -->
-
-                <div class="period" id="period-1">
+                <div class="period" id="period1">
 
                     <div class="top-elements">
                         <div class="date-elements">
                             <div>
-                                <label class="period-label-start" for="start">Da: </label>
-                                <input type="date" name="start-1" id="start-1">
+                                <label class="period-label-start" for="start1">Da: </label>
+                                <input type="date" name="start1" id="start1">
                             </div>
 
                             <div>
-                                <label class="period-label-end" for="end">A: </label>
-                                <input type="date" name="end-1" id="end-1">
+                                <label class="period-label-end" for="end1">A: </label>
+                                <input type="date" name="end1" id="end1">
                             </div>
                         </div>
 
-                        <input type="file" name="images-1[]" id="images-1" multiple="true" accept="image/png, image/jpg, image/jpeg">
-                        <label class="file-picker" for="images-1" id="images-label-1"><i class="bi bi-plus pe-1"></i><i class="bi bi-images"></i></label>
+                        <input type="file" name="images1[]" id="images1" multiple="true" accept="image/png, image/jpg, image/jpeg">
+                        <label class="file-picker" for="images1" id="imagesLabel1"><i class="bi bi-plus pe-1"></i><i class="bi bi-images"></i></label>
                     </div>
 
-                    <textarea class="period-description" placeholder="Descrivi le attività svolte durante questo periodo" name="description-1" id="description-1"></textarea>
+                    <textarea class="period-description" placeholder="Descrivi le attività svolte durante questo periodo" name="description1" id="description1"></textarea>
 
                 </div>
 

@@ -1,13 +1,13 @@
 function checkForm()
 {
-    if(document.getElementById("search-box").value == "") //Se la ricerca è vuota
+    if($("#searchBox").val() == "") //Se la ricerca è vuota
     { 
-        document.getElementById("search-form").style.borderColor = "rgba(200, 37, 37, 0.9)";
-        document.getElementById("search-form").style.borderWidth = "2px";
+        $("#searchForm").css("border-color", "rgba(200, 37, 37, 0.9)");
+        $("#searchForm").css("border-width", "2px");
         return false;
     }
 
-    addSearchCookie(document.getElementById("search-box").value);
+    addSearchCookie($("#searchBox").val());
     return true;
 }
 

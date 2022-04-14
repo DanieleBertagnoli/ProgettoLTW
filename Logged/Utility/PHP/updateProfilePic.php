@@ -11,8 +11,9 @@
     $email = $_SESSION['email'];
 
     $profilePic = $_FILES['imagePicker']['tmp_name'][0];
-    move_uploaded_file($profilePic, "../../../ProfilePic/$email");
+    
+    move_uploaded_file($profilePic, "../../../ProfilePics/$email");
+    echo "finito";
 
     header("Location: ../../myProfilePage.php");
-
 ?>

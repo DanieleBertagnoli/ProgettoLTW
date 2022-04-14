@@ -26,36 +26,45 @@
     $user = $_SESSION['email'];
 
     $visitedPlaces = $_POST['place'];
+    $visitedPlaces = explode(",",$visitedPlaces);
+    $newVisitedPlaces = ",";
+
+    for($i=0;$i<count($visitedPlaces); $i++)
+    { 
+        $visitedPlaces[$i] = trim($visitedPlaces[$i]); 
+        $newVisitedPlaces = $newVisitedPlaces . $visitedPlaces[$i] . ",";
+    }
+
     $title = $_POST['title'];
-    $numPeriods = $_POST['period-num'];
+    $numPeriods = $_POST['periodNum'];
 
     $imageCounter = 1;
     $description = "";
 
     for($i = 1; $i <= $numPeriods; $i++)
     {
-        if(!isset($_POST["start-{$i}"]))
+        if(!isset($_POST["start{$i}"]))
         { continue; }
         
-        $start = $_POST["start-{$i}"];
-        $end = $_POST["start-{$i}"];
-        $localDescription = $_POST["description-{$i}"];
+        $start = $_POST["start{$i}"];
+        $end = $_POST["end{$i}"];
+        $localDescription = $_POST["description{$i}"];
 
         $description = $description . "~(~~)~Dal " . $start . " al " . $end. ": " . $localDescription . "\n";
 
         $fileCount = 0;
-        if(isset($_FILES["images-{$i}"]['name']))
+        if(isset($_FILES["images{$i}"]['name']))
         {
             $oldumask2 = umask(0);
             mkdir("../../../TripImages/{$nextId}/period-{$i}", 0777);
             umask($oldumask2);
 
-            $fileCount = count($_FILES["images-{$i}"]['name']);
+            $fileCount = count($_FILES["images{$i}"]['name']);
         }
 
         for($j = 0; $j < $fileCount; $j++)
         {
-            $fileTmpName = $_FILES["images-{$i}"]['tmp_name'][$j];
+            $fileTmpName = $_FILES["images{$i}"]['tmp_name'][$j];
 
             $fileNameNew = $nextId . "-" . $imageCounter;
             move_uploaded_file($fileTmpName, "../../../TripImages/{$nextId}/period-{$i}/{$fileNameNew}");
@@ -72,7 +81,7 @@
     $keywords = str_replace($toRemove, " ", $keywords);
 
     $query = $connection -> prepare("INSERT INTO trip (ID, TITLE, DESCRIPTION, VISITED_PLACES, USER, KEYWORDS) VALUES (?, ?, ?, ?, ?, ?)");
-    $query -> bind_param("isssss", $nextId, $title, $description, $visitedPlaces, $user, $keywords);
+    $query -> bind_param("isssss", $nextId, $title, $description, $newVisitedPlaces, $user, $keywords);
     $error = $query -> execute();
 
     if(!$error)
