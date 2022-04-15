@@ -53,10 +53,7 @@ h1, label
     height: fit-content;
     width: 260px;
     text-align: center;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-top: 7px;
-    padding-bottom: 7px;
+    padding: 7px 15px;
     font-weight: 500;
     font-size: 20px;
     border-radius: 60px;
@@ -65,10 +62,22 @@ h1, label
     outline: none;
     color: white;
     margin-right: auto;
-    margin-left: 3rem;
+    margin-left: 2rem;
     margin-bottom: 0.5rem;
     margin-top: 2rem;
     cursor: pointer;
+}
+
+.thumbnail-picker:hover
+{ background-color: #008867; }
+
+.tag-selector
+{
+    margin-top: 2rem;
+    margin-left: 2rem;
+    font-size: 30px;
+    width: fit-content;
+    height: fit-content;
 }
 
 .period

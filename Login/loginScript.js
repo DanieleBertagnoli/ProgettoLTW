@@ -2,25 +2,25 @@ function check()
 {
     var errorMessage = ""; //Errore da stampare
 
-    if(document.getElementById("password").value == "") //Se la password è vuota
+    if($("#password").val() == "") //Se la password è vuota
     { 
-        document.getElementById("password").style.borderColor = "rgba(200, 37, 37, 0.9)";
+        $("#password").css("border-color", "rgba(200, 37, 37, 0.9)");
+        $("#password").css("border-width", "2px");
         errorMessage = "Inserire la della password"; 
     }
 
-    if(document.getElementById("email").value == "") //Se l'email è vuota
+    if($("#email").val() == "") //Se l'email è vuota
     { 
-        document.getElementById("email").style.borderColor = "rgba(200, 37, 37, 0.9)";
+        $("#email").css("border-color", "rgba(200, 37, 37, 0.9)");
+        $("#email").css("border-width", "2px");
         errorMessage = "Inserire una email"; 
     }
 
     if(errorMessage != "") //Se c'è almeno un errore
     { 
         if(document.getElementById("errorMessage") == null)
-        { document.getElementById("form").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible" id="errorMessage" style="visibility: hidden; height: fit-content"></div>'); }
-        document.getElementById("generalContainerLogin").classList.add("error-login"); //Aggiungo la classe CSS error che permette di modificare la vh al general-container-login
-        document.getElementById("errorMessage").style.visibility = "visible"; //Rendo visibile la div che contiene l'errore
-        document.getElementById("errorMessage").innerHTML = "<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible()\'></button>"; //Aggiungo l'HTML interno alla div
+        { document.getElementById("form").insertAdjacentHTML("afterbegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible" id="errorMessage" style="height: fit-content"></div>'); }
+        $("#errorMessage").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible()\'></button>"); //Aggiungo l'HTML interno alla div
         return false;
     }
 

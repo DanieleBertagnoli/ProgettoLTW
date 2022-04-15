@@ -131,6 +131,10 @@
                     <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
+                            <a class="nav-link" href="myFriends.php" aria-disabled="true">I miei amici</a> 
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
                         </li>
 
@@ -147,13 +151,14 @@
                         </li>
 
                     </ul>
+
                 </div>
             </div>
         </nav>
 
             <?php
 
-                $tripsNum = count($trips);
+                $tripsNum = count($trips) + count($similarTrips);
 
                 if($tripsNum == 0)
                 { echo "<h1 class=\"text-center\"> Nessun risultato per: \"$keywords\"</h1>"; }
@@ -191,13 +196,6 @@
             ?>
 
         </div>
-
-            <?php
-
-                if(count($similarTrips) != 0)
-                { echo "<h1 class=\"text-center mt-5\">Risultati correlati</h1>"; }
-
-            ?>
 
         <div class="general-container">
 

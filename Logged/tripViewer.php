@@ -133,6 +133,10 @@
                     <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
+                            <a class="nav-link" href="myFriends.php" aria-disabled="true">I miei amici</a> 
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
                         </li>
 
@@ -149,10 +153,12 @@
                         </li>
 
                     </ul>
+
                 </div>
             </div>
         </nav>
-        <div class="general-container">
+
+        <div id="generalContainer" class="general-container">
             <h1 class="text-center" style="padding-bottom: 2rem"> <?php echo $title; ?> </h1>
             <?php
                 for($i = 1; $i <= $numPeriods; $i++)
@@ -170,7 +176,8 @@
                     
                     echo "<div class=\"view-container\">";
                     
-                    echo "<div style=\"heigth: 80%\" class=\"main-carousel\" data-flickity='{ \"cellAlign\": \"left\", \"contain\": true }'>";
+                    // echo "<div style=\"heigth: 80%\" class=\"main-carousel\" data-flickity='{ \"cellAlign\": \"left\", \"contain\": true }'>";
+                    echo "<div style=\"heigth: 80%\" data-flickity='{ \"cellAlign\": \"left\", \"contain\": true }'>";
                     echo $carouselCells;
                     echo "</div>";
                     

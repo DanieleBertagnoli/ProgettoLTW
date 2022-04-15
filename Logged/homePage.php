@@ -14,6 +14,23 @@
     $email = $_SESSION['email'];
     $username = $_SESSION['username'];
 
+    $query = $connection -> prepare("SELECT * FROM admin WHERE email=?");
+    $query -> bind_param("s", $email);
+    $error = $query -> execute();
+
+    if(!$error)
+    { 
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
+
+    $result = $query -> get_result();
+    $row = $result -> fetch_assoc();
+    if($row != 0)
+    { $admin = 1; }
+    else
+    { $admin = 0; }
+
     $query = $connection -> prepare("SELECT * FROM trip");
     $error = $query -> execute();
 
@@ -188,7 +205,7 @@
     
                 <div class="collapse navbar-collapse" id="navbarScroll">
       
-                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#">Home</a> <!-- Link alla home -->
@@ -197,10 +214,25 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Contatti</a> <!-- Link alla pagina dei contatti -->
                         </li>
+
+                        <?php
+                        
+                            if($admin == 1)
+                            {
+                                echo    '<li class="nav-item">
+                                            <a class="nav-link" href="showProblems.php">Segnalazioni</a> 
+                                        </li>';
+                            }
+                        
+                        ?>
         
                     </ul>
 
-                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="myFriends.php" aria-disabled="true">I miei amici</a> 
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
@@ -256,7 +288,10 @@
             <div class="poster-content reveal">
                 <h1 class="my-4">Immergiti nella natura!</h1>
                 <p>Se sei un amante della natura, adorerai gli itinerari immersi nel verde proposti dai nostri utenti. Sprofonda nel verde di una foresta o rilassati nei prati sconfinati in cornici idillache.</p>
-                <button href="" class="btn btn-primary my-3">Scopri gli itinerari</button>
+                <form action="searchResult.php" method="POST">
+                    <input type="hidden" name="searchBox" value="montagna">
+                    <button href="" class="btn btn-primary my-3">Scopri gli itinerari</button>
+                </form>
             </div>
 
         </section>
@@ -270,7 +305,10 @@
             <div class="poster-content reveal">
                 <h1 class="my-4">Ammira lo splendore delle città!</h1>
                 <p>Diventa un turista per le strade di una città. Visita musei, monumenti, e luoghi suggeriti dai nostri utenti. Lasciati guidare dalla cuoriosità di scoprire nuove culture e usanze.</p>
-                <button href="" class="btn btn-primary my-3">Scopri gli itinerari</button>
+                <form action="searchResult.php" method="POST">
+                    <input type="hidden" name="searchBox" value="città">
+                    <button href="" class="btn btn-primary my-3">Scopri gli itinerari</button>
+                </form>
             </div>
 
         </section>

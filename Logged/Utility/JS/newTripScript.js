@@ -24,6 +24,9 @@ function addPeriod()
 function removePeriod(id)
 { document.getElementById(id).remove(); }
 
+function changeThumbnail()
+{ $("#thumbnailLabel").html('Copertina selezionata <i class="bi bi-images"></i>'); }
+
 function changeLabel(id, idLabel)
 { 
     var numFiles = document.getElementById(id).files.length;
@@ -52,6 +55,13 @@ function checkForm()
         var errorMessage = "Inserire almeno un luogo"; 
         $("#place").css("border-color", "rgba(200, 37, 37, 0.9)");
         $("#place").css("border-width", "2px");
+        setError(errorMessage);
+        return false;
+    }
+
+    if($("#tagPicker").val().length == 0) 
+    { 
+        var errorMessage = "Selezionare almeno un tag"; 
         setError(errorMessage);
         return false;
     }

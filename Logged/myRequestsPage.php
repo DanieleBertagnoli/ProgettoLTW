@@ -82,7 +82,11 @@
                     <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
-                            <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
+                            <a class="nav-link" href="myFriends.php" aria-disabled="true">I miei amici</a> 
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" aria-disabled="true">Richieste di amicizia</a> 
                         </li>
 
                         <li class="nav-item">
@@ -98,6 +102,7 @@
                         </li>
 
                     </ul>
+
                 </div>
             </div>
         </nav>

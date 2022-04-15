@@ -1,60 +1,51 @@
 <?php
-
+    
     require "Utility/PHP/initConnection.php";
     $connection = initConnection();
 
+    if(!$connection)
+    {
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+    }
+
     session_start();
 
-    if(!isset($_GET['user']) || $_GET['user'] == "" || !$connection)
-    {
-        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina del profilo dell'utente a causa di paramentri mancanti. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
-    }
-
-    $user = $_GET['user'];
     $email = $_SESSION['email'];
 
-    $query = $connection -> prepare('SELECT username, gender, birthday, country FROM `users` WHERE email=?');
-    $query -> bind_param("s", $user);
-    $success = $query -> execute();
+    $query = $connection -> prepare("SELECT * FROM admin WHERE email=?");
+    $query -> bind_param("s", $email);
+    $error = $query -> execute();
 
-    if(!$success)
+    if(!$error)
     { 
-        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina del profilo dell'utente. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
         header("Location: errorPage.php?errorMessage=" . $errorMessage); 
     }
 
-    $row = $query -> get_result() -> fetch_assoc();
-    $username = $row['username'];
+    $result = $query -> get_result();
+    $row = $result -> fetch_assoc();
+    if($row != 0)
+    { $admin = 1; }
+    else
+    { $admin = 0; }
 
-    $gender = $row['gender'];
-    if($gender == "")
-    { $gender = "N/S"; }
+    if($admin == 0)
+    { header("Location: homePage.php"); }
 
-    $country = $row['country'];
-    if($country == "")
-    { $country = "N/S"; }
+    $query = $connection -> prepare("SELECT * FROM problems WHERE email=?");
+    $query -> bind_param("s", $email);
+    $error = $query -> execute();
 
-    $birthDay = $row['birthday'];
-    if($birthDay == "0000-00-00")
-    { $birthDay = "N/S"; }
-
-    $profilePic = "../ProfilePics/" . $user;
-
-    $query = $connection -> prepare('SELECT * FROM `friends` WHERE (user1=? AND user2=?) OR (user1=? AND user2=?)');
-    $query -> bind_param("ssss", $user, $email, $email, $user);
-    $success = $query -> execute();
-
-    if(!$success)
+    if(!$error)
     { 
-        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina del profilo dell'utente. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
         header("Location: errorPage.php?errorMessage=" . $errorMessage); 
     }
 
-    $row = $query -> get_result() -> fetch_assoc();
-    if(($row == 0 || ($row['pending'] == "1" && $row['user2'] == $user)) && $email != $user)
-    { header("Location: privateProfilePage.php?user=$user"); }
+    $result = $query -> get_result();
 
+    mysqli_close($connection);
 ?>
 
 <!DOCTYPE html>
@@ -67,14 +58,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" href="../Bootstrap/bootstrap.css">
-        <link rel="stylesheet" href="../CSS/externalProfileStyle.css">
+        <link rel="stylesheet" href="../CSS/showProblemsStyle.css">
         
         <!-- CSS icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
-        <script src="../Bootstrap/js/bootstrap.bundle.js"></script>
+        <!-- CSS base per il carousel -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/3.0.0/flickity.min.css" integrity="sha512-fJcFDOQo2+/Ke365m0NMCZt5uGYEWSxth3wg2i0dXu7A1jQfz9T4hdzz6nkzwmJdOdkcS8jmy2lWGaRXl+nFMQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        <title>Profilo</title>
+        <script src="../Bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="Utility/JS/showProblemsScript.js"></script>
+
+        <!-- API per lo scroll reveal -->
+        <script src="https://unpkg.com/scrollreveal"></script> 
+
+        <title>HomePage</title>
 
     </head>
 
@@ -109,6 +107,10 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Contatti</a> <!-- Link alla pagina dei contatti -->
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Segnalazioni</a> 
+                        </li>
         
                     </ul>
 
@@ -142,33 +144,23 @@
 
         <div class="general-container">
 
-            <div class="profile-container">
-
-                <div class="image-container">
-                    <img class="profile-pic" src="<?php echo $profilePic; ?>" alt="">
-                </div> 
-
-                <div class="info-container">
-
-                    <h1 style="align-self: center"> <?php echo $username; ?> </h1>
-                        
-                    <p class="profile-label mt-5">Email: <?php echo $user; ?> </p>
-                    <hr class="profile-separator">
-                        
-                    <p class="profile-label">Genere: <?php echo $gender; ?> </p>
-                    <hr class="profile-separator">
-
-                    <p class="profile-label">Nazione: <?php echo $country; ?> </p>
-                    <hr class="profile-separator">
-
-                    <p class="profile-label">Data di nascita: <?php echo $birthDay; ?> </p>
-                    <hr class="profile-separator">
-
+            <div class="period" id="period">
+                
+                <label for="date">Scegli il periodo:</label>
+                
+                <div>
+                    <input type="date" name="start" id="start">
+                    <input type="date" name="end" id="end">
                 </div>
+
+                <button class="btn-update" onclick='return update()'>Cerca</button>
 
             </div>
 
-            <button class="btn-trip"><a href="userTripsPage.php?user=<?php echo $user; ?>">Viaggi dell'utente</a></button>
+
+            <div class="problem-container" id="problemContainer">
+
+            </div>
 
         </div>
 

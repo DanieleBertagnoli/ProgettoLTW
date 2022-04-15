@@ -133,11 +133,13 @@ function openPopup(index)
     
     popupImage.src = sourceImage;
     popup.style.display = "block";
+    document.body.style.overflow = 'hidden';
 }
 
 function closePopup()
 {
     document.getElementById('myPopup').style.display = 'none';
+    document.body.style.overflow = 'scroll';
 }
 
 function setInvisible(element)

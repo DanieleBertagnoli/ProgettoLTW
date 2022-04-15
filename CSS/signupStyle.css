@@ -28,7 +28,7 @@ body
     box-shadow: 0px 0px 56px 23px rgba(0,0,0,0.73);
 }
 
-.btn-login
+.btn-signup
 {
     width: fit-content; 
     margin-top: 5%;
@@ -71,7 +71,7 @@ body
     .form-container label
     { font-size: 20px; }
 
-    .btn-login
+    .btn-signup
     { font-size: 25px; }
 }
 
@@ -86,17 +86,17 @@ body
     .form-container label
     { font-size: 17px; }
 
-    .btn-login
+    .btn-signup
     { font-size: 22px; }
 }
 
-@media (max-height: 800px)
+@media (max-height: 870px)
 {
     .background
     { margin: 3rem auto; }
 }
 
-@media (max-height: 500px)
+@media (max-height: 740px)
 {
     body
     { overflow: scroll; }

@@ -26,6 +26,8 @@
         <!-- CSS icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css">
+
         <script src="../Bootstrap/js/bootstrap.bundle.js"></script>
         <script src="Utility/JS/newTripScript.js"></script>
 
@@ -34,12 +36,6 @@
     </head>
 
     <body>
-
-        <!-- API per il carousel -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/3.0.0/flickity.pkgd.min.js" integrity="sha512-achKCfKcYJg0u0J7UDJZbtrffUwtTLQMFSn28bDJ1Xl9DWkl/6VDT3LMfVTo09V51hmnjrrOTbtg4rEgg0QArA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-        <!-- Jquery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
         <!-- Navigation bar -->
 
@@ -70,6 +66,10 @@
                     <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
+                            <a class="nav-link" href="myFriends.php" aria-disabled="true">I miei amici</a> 
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
                         </li>
 
@@ -86,6 +86,7 @@
                         </li>
 
                     </ul>
+
                 </div>
             </div>
         </nav>
@@ -108,7 +109,17 @@
                     <textarea type="text" name="place" id="place" placeholder="Inserire i luoghi visitati" maxlength="190" rows="3"></textarea>
                 </div>
 
-                <input type="file" name="thumbnail" id="thumbnail" multiple="false" accept="image/png, image/jpg, image/jpeg">
+                <div class="tag-selector" id="tagPickerContainer">
+                    <select id="tagPicker" name="tagPicker[]" class="selectpicker" multiple title="Segli i tag">
+                        <option value="mare">Mare</option>
+                        <option value="montagna">Montagna</option>
+                        <option value="città">Città</option>
+                        <option value="relax">Relax</option>
+                        <option value="avventura">Avventura</option>
+                    </select>
+                </div>
+
+                <input type="file" name="thumbnail" id="thumbnail" multiple="false" accept="image/png, image/jpg, image/jpeg" onchange="changeThumbnail()">
                 <label class="thumbnail-picker" for="thumbnail" id="thumbnailLabel">Seleziona un'immagine di copertina <i class="bi bi-images"></i></label>
 
                 <div class="period" id="period1">
@@ -141,6 +152,15 @@
             </form>
 
         </div>
+
+
+        <!-- API per il carousel -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/3.0.0/flickity.pkgd.min.js" integrity="sha512-achKCfKcYJg0u0J7UDJZbtrffUwtTLQMFSn28bDJ1Xl9DWkl/6VDT3LMfVTo09V51hmnjrrOTbtg4rEgg0QArA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <!-- Jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
 
     </body>
 

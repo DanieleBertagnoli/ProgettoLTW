@@ -10,6 +10,8 @@
 
     session_start();
 
+    $email = $_SESSION['email'];
+
     $user = $_GET["user"];
 
     $query = $connection -> prepare("SELECT * FROM trip WHERE user=?");
@@ -41,6 +43,8 @@
     $row = $result -> fetch_assoc();
     $username = $row['username'];
     
+    $active = "active";
+
     mysqli_close($connection);
 ?>
 
@@ -96,11 +100,15 @@
                     <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
+                            <a class="nav-link" href="myFriends.php" aria-disabled="true">I miei amici</a> 
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> 
+                            <a class="nav-link <?php if($email == $user){ echo $active; } ?>" href="userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> 
                         </li>
 
                         <li class="nav-item">
@@ -112,6 +120,7 @@
                         </li>
 
                     </ul>
+
                 </div>
             </div>
         </nav>
