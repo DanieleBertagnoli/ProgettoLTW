@@ -1,20 +1,21 @@
 <?php
     require "Utility/PHP/initConnection.php";
-    $connection = initConnection();
+    $connection = initConnection(); //Inizializzo la connessione con il database e controllo se utente e' loggato.
     
     if(!$connection || !isset($_GET['user']))
     {
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di inserimento di un nuovo itinerario a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
         header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        exit();
     }
 
-    session_start();
+    session_start(); //Comincio la sessione
 
     $email = $_SESSION['email'];
 
     $user = $_GET["user"];
 
-    $query = $connection -> prepare("SELECT * FROM trip WHERE user=?");
+    $query = $connection -> prepare("SELECT * FROM trip WHERE user=?"); //Prendo dal database tutti i viaggi dell'utente.
     $query -> bind_param("s", $user);
     $success = $query -> execute();
 
@@ -22,6 +23,7 @@
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina con i risultati della ricerca. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
         header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        exit();
     }
 
     $result = $query -> get_result();
@@ -29,7 +31,7 @@
     while($row = $result -> fetch_assoc())
     { $trips[] = $row; }
 
-    $query = $connection -> prepare("SELECT * FROM users WHERE email=?");
+    $query = $connection -> prepare("SELECT * FROM users WHERE email=?"); //Prendo tutti gli utenti con quella particolare email.
     $query -> bind_param("s", $user);
     $success = $query -> execute();
 
@@ -37,6 +39,7 @@
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina con i risultati della ricerca. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
         header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        exit();
     }
 
     $result = $query -> get_result();
@@ -57,9 +60,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <!-- Link ai CSS -->
         <link rel="stylesheet" href="../Bootstrap/bootstrap.css">
         <link rel="stylesheet" href="../CSS/searchResultStyle.css">
 
+        <!-- Bundle con le informazioni JS di bootstrap -->
         <script src="../Bootstrap/js/bootstrap.bundle.js"></script>
 
         <title>User trips</title>
@@ -127,7 +132,7 @@
 
             <?php
 
-                $tripsNum = count($trips);
+                $tripsNum = count($trips); //Conto quanti trip ha effettuato l'utente.
 
                 if($tripsNum == 0)
                 { echo "<h1 class=\"text-center\"> Nessun viaggio di $username</h1>"; }
@@ -142,18 +147,21 @@
 
             <?php
 
-                for($i=0; $i<count($trips); $i++)
+                for($i=0; $i<count($trips); $i++) //Per ogni trip dell'utente.
                 {
                     $temp = $trips[$i];
-
+                    
+                    //creo una superficie "cliccabile" che se premuta mi porta alla pagina dello specifico trip.
                     $tripDiv = "<a class=\"mt-5\" href=\"tripViewer.php?tripID=" . $temp['id'] . "\"><div class=\"trip\">";
 
+                    //Preparo la descrizione togliendo dalla stringa tutti i caratteri usati dal sistema.
                     $description = $temp['description'];
                     $description = substr_replace($description, "", 0, 6);
                     $description = str_replace("~(~~)~", "<br>", $description);
-                    if(strlen($description) > 250)
+                    if(strlen($description) > 250) // Se la stringa risulta troppo lunga la termino con un ...
                     { $description = substr($description, 0, 250) . "..."; }
 
+                    //Creo il suo elemento da mostrare.
                     $tripDiv = $tripDiv . "<img class=\"trip-img\" src=\"../TripImages/" . $temp['id'] . "/thumbnail\"> 
                                             <div class=\"trip-text\">
                                                 <h2 class=\"trip-title\">" . $temp['title'] . "</h2>

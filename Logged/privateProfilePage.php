@@ -1,35 +1,47 @@
 <?php
 
     require "Utility/PHP/initConnection.php";
-    $connection = initConnection();
+    require "Utility/PHP/isAdmin.php";
+    $connection = initConnection(); //Inizializzo la connessione con il database e controllo se l'utente è loggato
 
-    session_start();
+    if(!$connection) //Se la connessione con il database non è andata a buon fine
+    {
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina per richiedere l'amicizia all'utente. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore ù
+        exit();
+    }
 
-    if(!isset($_GET['user']) || !$connection)
+    session_start(); //Avvio la sessione
+
+    if(!isset($_GET['user'])) //Se il parametro non è impostati
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina a causa di alcuni parametri mancati. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; 
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+        exit();
     }
     
-    $user = $_GET['user'];
-    $code = $_GET['code'];
+    $user = $_GET['user']; //Salvo il parametro della richiesta
     $email = $_SESSION['email'];
 
-    $query = $connection -> prepare('SELECT * FROM `friends` WHERE (user1=? AND user2=?) OR (user1=? AND user2=?)');
+    $query = $connection -> prepare('SELECT * FROM `friends` WHERE (user1=? AND user2=?) OR (user1=? AND user2=?)'); //Controllo se già esiste una richiesta tra i due utenti
     $query -> bind_param("ssss", $user, $email, $email, $user);
     $success = $query -> execute();
 
-    if(!$success)
+    if(!$success) //Se la query non va a buon fine
     { 
-        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina per richiedere l'amicizia all'utente. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore 
+        exit();
     }
 
-    $row = $query -> get_result() -> fetch_assoc();
-    if($row == 0)
+    $result = $query -> get_result();
+    $row = $result -> fetch_assoc();
+    if($row == 0) //Se non sono presenti richieste imposto il code a 0
     { $code = 0; }
-    else
+    else //Altrimenti imposto il code al valore del campo pending della richiesta
     { $code = $row['pending']; }
+
+    $admin = isAdmin(); //1 se l'utente è admin, 0 altrimenti
 
 ?>
 
@@ -42,12 +54,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <!-- Link ai CSS -->
         <link rel="stylesheet" href="../Bootstrap/bootstrap.css">
         <link rel="stylesheet" href="../CSS/errorPageStyle.css">
         
         <!-- CSS icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
+        <!-- Bundle con le funzioni JS di bootstrap -->
         <script src="../Bootstrap/js/bootstrap.bundle.js"></script>
 
         <title>Friends</title>
@@ -56,8 +70,7 @@
 
     <body>
 
-        <!-- Navigation bar -->
-
+        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
     
@@ -77,23 +90,34 @@
                         </li>
         
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contatti</a> <!-- Link alla pagina dei contatti -->
+                            <a class="nav-link" href="../Contacts/contactsPage.php">Contatti</a> <!-- Link alla pagina dei contatti -->
                         </li>
+
+                        <?php
+                        
+                            if($admin == 1) //Se l'utente è admin, allora aggiungo alla navbar anche la voce per le segnalazioni
+                            {
+                                echo    '<li class="nav-item">
+                                            <a class="nav-link" href="showProblems.php">Segnalazioni</a> 
+                                        </li>';
+                            }
+                        
+                        ?>
         
                     </ul>
 
                     <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
-                            <a class="nav-link" href="myFriends.php" aria-disabled="true">I miei amici</a> 
+                            <a class="nav-link" href="myFriends.php" aria-disabled="true">I miei amici</a> <!-- Link alla pagina delle amicizie -->
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
+                            <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> <!-- Link alla pagina delle richieste di amicizia -->
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> 
+                            <a class="nav-link" href="userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> <!-- Link alla pagina dei miei viaggi -->
                         </li>
 
                         <li class="nav-item">
@@ -110,13 +134,15 @@
             </div>
         </nav>
 
+        <!-- General container -->
         <div class="general-container">
             
+            <!-- Box contenente il messagigio di errore -->
             <div class="alert alert-success d-flex flex-column mb-0 mx-auto" id="info" style="width: 90%; height: auto; align-self: center;"> <!-- Div all'interno della quale viene inserito un messaggio di errore da check() -->
 
                 <?php
                     
-                    if($code == "0")
+                    if($code == "0") //Personalizzo il messaggio in base al valore di code
                     {
                         echo    '<strong>Il profilo di ' . $username . ' è privato, per poterlo visualizzare è necessario essere amici. <a href="Utility/PHP/insertFriend.php?user=' . $user . '">Clicca qui per inviare la richiesta di amicizia</a></strong>
                                 <a class="mt-5 text-center" href="homePage.php">Clicca qui per tornare indietro</a>';
@@ -127,6 +153,7 @@
                                 <a class="mt-5 text-center" href="homePage.php">Clicca qui per tornare indietro</a>';
                     }
                 ?>
+                
             </div> 
 
         </div>

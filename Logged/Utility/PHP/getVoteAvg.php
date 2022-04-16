@@ -1,7 +1,7 @@
 <?php
 
     require "initConnection.php";
-    $connection = initConnection();
+    $connection = initConnection(); //Inizializzo la connessione con il database e controllo se l'utente è loggato
 
     session_start();
 
@@ -10,7 +10,7 @@
 
     $tripID = $_GET['tripID'];
 
-    $query = $connection -> prepare("SELECT AVG(vote) as avg FROM votes WHERE trip=?");
+    $query = $connection -> prepare("SELECT AVG(vote) as avg FROM votes WHERE trip=?"); //Ottengo la media di tutti i voti per l'itinerario
     $query -> bind_param("i", $tripID);
     $success = $query -> execute();
 
@@ -20,7 +20,7 @@
     $result = $query -> get_result();
     $row = $result -> fetch_assoc();
 
-    echo $row['avg'];
+    echo $row['avg']; //Stampo la media
 
     mysqli_close($connection);
 

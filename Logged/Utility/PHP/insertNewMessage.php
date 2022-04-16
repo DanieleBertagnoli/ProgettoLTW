@@ -1,4 +1,5 @@
 <?php
+
     $host = "localhost";
     $username = "localuser";
     $psw = "local";
@@ -14,7 +15,7 @@
     $currentDate = new DateTime();
     $currentDate = $currentDate->format('Y-m-d');
 
-    $query = $connection -> prepare('INSERT INTO problems (email, subject, text, date) VALUES (?, ?, ?, ?)');
+    $query = $connection -> prepare('INSERT INTO problems (email, subject, text, date) VALUES (?, ?, ?, ?)'); //Inserisco il commento nel database
     $query -> bind_param("ssss", $email, $subject, $description, $currentDate);
     $success = $query -> execute();
 

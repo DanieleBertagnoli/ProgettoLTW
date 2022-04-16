@@ -1,6 +1,6 @@
 <?php
 
-    session_start();
+    session_start(); //Avvio la sessione
 
 ?>
 
@@ -13,24 +13,27 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <!-- Link ai CSS -->
         <link rel="stylesheet" href="../Bootstrap/bootstrap.css">
         <link rel="stylesheet" href="../CSS/contactsStyle.css">
 
+        <!-- Link allo script JS -->
         <script src="contactsScript.js"></script>
 
-        <title>Login</title>
+        <title>Contacts</title>
 
     </head>
 
     <body>
 
+        <!-- Bundle con le funzioni JS di bootstrap -->
         <script src="../Bootstrap/js/bootstrap.bundle.js"></script>
 
         <!-- Jquery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 
-        <!-- Navigation bar -->
+        <!-- Navbar -->
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
@@ -45,6 +48,8 @@
                 <div class="collapse navbar-collapse" id="navbarScroll">
         
                     <?php
+
+                        /* Se il parametro email della sesisone non è impostato l'utente non è loggato, quindi stampo la navbar per gli non utenti loggati */
 
                         if(!isset($_SESSION['email']))
                         {
@@ -73,6 +78,9 @@
 
                                     </ul>';
                         }
+
+                        /* Altrimenti l'utente è loggato, quindi stampo la navbar per gli utenti loggati */
+                        
                         else
                         {
                             echo '
@@ -118,17 +126,21 @@
             </div>
         </nav>
 
+        <!-- Background -->
         <div class="background">
 
+                <!-- Form -->
                 <div class="form-container" id="form">
-                            
+                           
+                    <!-- Email -->
                     <div class="mb-3">
                                 
                         <label for="email" class="form-label">Indirizzo Email: </label>
                         <input type="email" class="form-control" name="email" id="email" placeholder="Email">
                             
                     </div>
-                            
+                        
+                    <!-- Oggetto del problema -->
                     <div class="mb-3">
                             
                         <label for="subject" class="form-label">Oggetto del problema: </label>
@@ -136,6 +148,7 @@
                             
                     </div>
 
+                    <!-- Descrizione del problema -->
                     <div class="mb-3">
                             
                         <label for="description" class="form-label">Descrizione dettagliata del problema: </label>

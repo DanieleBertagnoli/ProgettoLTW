@@ -1,82 +1,67 @@
 <?php
 
     require "Utility/PHP/initConnection.php";
-    $connection = initConnection();
+    require "Utility/PHP/isAdmin.php";
+    $connection = initConnection(); //Inizializzo la connessione con il database e controllo se l'utente è loggato
 
-    if(!$connection)
+    if(!$connection) //Se la connessione con il database non è andata a buon fine
     {
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+        exit();
     }
 
-    session_start();
+    session_start(); //Avvio la sessione
 
-    $email = $_SESSION['email'];
+    $email = $_SESSION['email']; //Ottengo i parametri dell'utente loggato
     $username = $_SESSION['username'];
 
-    $query = $connection -> prepare("SELECT * FROM admin WHERE email=?");
-    $query -> bind_param("s", $email);
-    $error = $query -> execute();
+    $query = $connection -> prepare("SELECT * FROM trip"); //Seleziono tutti gli itinerari nel database
+    $success = $query -> execute();
 
-    if(!$error)
+    if(!$success) //Se la query non va a buon fine
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
-    }
-
-    $result = $query -> get_result();
-    $row = $result -> fetch_assoc();
-    if($row != 0)
-    { $admin = 1; }
-    else
-    { $admin = 0; }
-
-    $query = $connection -> prepare("SELECT * FROM trip");
-    $error = $query -> execute();
-
-    if(!$error)
-    { 
-        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        header("Location: errorPage.php?errorMessage=" . $errorMessage);  //Redirect alla pagina di errore
+        exit();
     }
 
     $result = $query -> get_result();
 
     $rows = array();
-    while($row = $result -> fetch_assoc())
+    while($row = $result -> fetch_assoc()) //Prendo ogni riga e la metto in un array
     { $rows[] = $row; }
 
     $cellCount = 7;
     if(count($rows) < $cellCount) //Ho meno itinerari nel DB di quante celle voglio creare
     { $cellCount = count($rows); } //Ne creo tante quanti sono gli itinerari
 
-    
-    /* CREATING THE CAROUSEL CELLS */
+    /* Creo le celle del carosello */
 
-    $trips = array();
-    $cookies = $_COOKIE['search'];
-    $cookies = explode("~(~~)~", $cookies);
-    for($y=count($cookies)-2; $y>=0; $y--)
+    $trips = array(); //Creo un array vuoto
+    $cookies = $_COOKIE['search']; //Ottengo i cookie di ricerca
+    $cookies = explode("~(~~)~", $cookies); //Suddivido la stringa
+    for($y=count($cookies)-2; $y>=0; $y--) //Per ogni ricerca effettuata, partendo dall'ultima
     {
-        $keywords = $cookies[$y];
-        $keywords = strtolower($keywords);
+        $keywords = $cookies[$y]; //Salvo la ricerca
+        $keywords = strtolower($keywords); //Converto tutti i caratteri in minuscolo
 
-        $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(title)=?");
+        $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(title)=?"); //Ottengo tutti i viaggi il cui titolo coincide esattamente con la ricerca
         $query -> bind_param("s", $keywords);
-        $error = $query -> execute();
+        $success = $query -> execute();
 
-        if(!$error)
+        if(!$success) //Se la query non va a buon fine
         { 
             $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
-            header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+            header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+            exit();
         }
 
         $result = $query -> get_result();
-
-        while($row = $result -> fetch_assoc())
+        while($row = $result -> fetch_assoc()) //Per ogni riga della query
         { 
             $in = false;
-            for($j=0; $j<count($trips); $j++)
+            for($j=0; $j<count($trips); $j++) //Controllo se l'id dell'itinerario della query è già presente nell'array dei trips selezionati
             {
                 if($trips[$j]['id'] == $row['id'])
                 { 
@@ -85,72 +70,74 @@
                 }
             }
 
-            if(!$in)
+            if(!$in) //Se è presente non lo aggiungo
             { $trips[] = $row; }
         }
 
-        $splitKeywords = explode(" ", $keywords);
+        $splitKeywords = explode(" ", $keywords); //Suddivido la singola ricerca in base agli spazi
 
-        for($i=0; $i<count($splitKeywords); $i++)
+        for($i=0; $i<count($splitKeywords); $i++) //Per ogni parola della ricerca
         {
             $temp = "% ".$splitKeywords[$i]." %";
-            $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(keywords) LIKE ?");
+            $query = $connection -> prepare("SELECT * FROM trip WHERE LOWER(keywords) LIKE ?"); //Ottengo tutti gli itinerari che hanno la parola all'interno del campo keywords
             $query -> bind_param("s", $temp);
-            $error = $query -> execute();
+            $success = $query -> execute();
 
-            if(!$error)
+            if(!$success) //Se la query non va a buon fine
             { 
                 $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
-                header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+                header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+                exit();
             }
 
             $result = $query -> get_result();
-
-            while($row = $result -> fetch_assoc())
+            while($row = $result -> fetch_assoc()) //Per ogni riga della query
             {     
                 $in = false;
                 for($j=0; $j<count($trips); $j++)
                 {
-                    if($trips[$j]['id'] == $row['id'])
+                    if($trips[$j]['id'] == $row['id']) //Controllo se l'id dell'itinerario della query è già presente nell'array dei trips selezionati
                     { 
                         $in = true; 
                         break; 
                     }
                 }
 
-                if(!$in)
+                if(!$in) //Se è presente non lo aggiungo
                 { $trips[] = $row; } 
             }
         }
     }
 
-    for($i=0; $i<count($rows); $i++)
+    for($i=0; $i<count($rows); $i++) //Se all'interno degli itinerari da mostrare non ho ancora raggiunto il limite delle celle che si vogliono generare tramite le ricerche precedenti, aggiungo viaggi casuali
     {
         $row = $rows[$i];
         $in = false;
         for($j=0; $j<count($trips); $j++)
         {
-            if($trips[$j]['id'] == $row['id'])
+            if($trips[$j]['id'] == $row['id']) //Controllo se l'id dell'itinerario della query è già presente nell'array dei trips selezionati
             { 
                 $in = true; 
                 break; 
             }
         }
 
-        if(!$in)
+        if(!$in) //Se è presente non lo aggiungo
         { $trips[] = $row; }
 
-        if(count($trips) >= $cellCount)
+        if(count($trips) >= $cellCount) //Se l'array degli itinerari che verrano mostrati ha raggiunto la lunghezza desiderata allora termino di aggiungere viaggi
         { break; }
     }
 
-    for($i=0; $i<$cellCount; $i++)
+    for($i=0; $i<$cellCount; $i++) //Per ogni itinerario selezionato, creo una carouselCell
     {
         $carouselCells = $carouselCells . " " . "<a href=\"tripViewer.php?tripID=" . $trips[$i]['id'] . "\"><div class=\"carousel-cell\" style=\"background: linear-gradient(0deg, rgba(0,0,0,.2), rgba(0,0,0,.7)), 
                                                     url('../TripImages/" . $trips[$i]['id'] . "/thumbnail') no-repeat center center; 
                                                     background-size: cover; overflow: hidden;\">" . $trips[$i]['title'] . "</div></a>";
                 
     }
+
+    $admin = isAdmin(); //1 se l'utente è admin, 0 altrimenti
 
     mysqli_close($connection);
 ?>
@@ -164,6 +151,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <!-- Link ai CSS -->
         <link rel="stylesheet" href="../Bootstrap/bootstrap.css">
         <link rel="stylesheet" href="../CSS/homeStyle.css">
         
@@ -173,7 +161,10 @@
         <!-- CSS base per il carousel -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/3.0.0/flickity.min.css" integrity="sha512-fJcFDOQo2+/Ke365m0NMCZt5uGYEWSxth3wg2i0dXu7A1jQfz9T4hdzz6nkzwmJdOdkcS8jmy2lWGaRXl+nFMQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+        <!-- Bundle con le funzioni JS di bootstrap -->
         <script src="../Bootstrap/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Link allo script JS -->
         <script src="Utility/JS/homeScript.js"></script>
 
         <!-- API per lo scroll reveal -->
@@ -191,8 +182,7 @@
         <!-- Jquery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-        <!-- Navigation bar -->
-
+        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
     
@@ -212,12 +202,12 @@
                         </li>
         
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contatti</a> <!-- Link alla pagina dei contatti -->
+                            <a class="nav-link" href="../Contacts/contactsPage.php">Contatti</a> <!-- Link alla pagina dei contatti -->
                         </li>
 
                         <?php
                         
-                            if($admin == 1)
+                            if($admin == 1) //Se l'utente è admin, allora aggiungo alla navbar anche la voce per le segnalazioni
                             {
                                 echo    '<li class="nav-item">
                                             <a class="nav-link" href="showProblems.php">Segnalazioni</a> 
@@ -231,15 +221,15 @@
                     <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
 
                         <li class="nav-item">
-                            <a class="nav-link" href="myFriends.php" aria-disabled="true">I miei amici</a> 
+                            <a class="nav-link" href="myFriends.php" aria-disabled="true">I miei amici</a> <!-- Link alla pagina delle amicizie -->
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
+                            <a class="nav-link" href="myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> <!-- Link alla pagina delle richieste di amicizia -->
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> 
+                            <a class="nav-link" href="userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> <!-- Link alla pagina dei miei viaggi -->
                         </li>
 
                         <li class="nav-item">
@@ -256,10 +246,13 @@
             </div>
         </nav>
 
+        <!-- Stampo lo username dell'utente -->
         <h1 class="text-center mt-2">Benvenuto <?php echo $username; ?></h1>
 
+        <!-- Sezione principale -->
         <section class="general-container">
 
+            <!-- Container dei due tools -->
             <div class="tools-container">
 
                 <a href="newTripPage.php"><button class="btn-add">Crea itinerario</button></a> <!-- Bottone per creare un nuovo itinerario -->
@@ -271,17 +264,21 @@
 
             </div>
 
+            <!-- Carousel -->
             <div class="main-carousel" data-flickity='{ "cellAlign": "left", "contain": true }'> <!-- Carousel generato dinamicamente in base ai cookie se presenti -->
 
+                <!-- Stampo le corousel cell ottenute nella sezione PHP -->
                 <?php echo $carouselCells; ?>
 
             </div>
               
         </section>
 
-        <section class="poster mt-5"> <!-- Poster section -->
+        <!-- Poster section per gli itinerari relativi alla montagna -->
+        <section class="poster mt-5"> 
 
-            <div class="poster-img reveal"> <!-- La classe reveal permette all'API dello scroll reveal di mostrare gli elementi in cascata -->
+            <!-- La classe reveal permette all'API dello scroll reveal di mostrare gli elementi in cascata -->
+            <div class="poster-img reveal"> 
                 <img src="../Media/camping.jpg" alt="">
             </div>
 
@@ -296,9 +293,11 @@
 
         </section>
 
-        <section class="poster mt-5"> <!-- Poster section -->
+        <!-- Poster section per gli itinerari relativi alla montagna -->
+        <section class="poster mt-5"> 
 
-            <div class="poster-img reveal"> <!-- La classe reveal permette all'API dello scroll reveal di mostrare gli elementi in cascata -->
+            <!-- La classe reveal permette all'API dello scroll reveal di mostrare gli elementi in cascata -->
+            <div class="poster-img reveal"> 
                 <img src="../Media/city.jpg" alt="">
             </div>
 

@@ -1,17 +1,17 @@
 <?php
 
     require "initConnection.php";
-    $connection = initConnection();
+    $connection = initConnection(); //Inizializza la connessione
 
-    session_start();
+    session_start(); //Inizializza la sessione.
 
-    if(!isset($_GET['newDate']) || !$connection) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
+    if(!isset($_POST['newDate']) || !$connection) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
     { return; }
 
     $email = $_SESSION['email'];
-    $newDate = $_GET['newDate'];
+    $newDate = $_POST['newDate'];
 
-    $query = $connection -> prepare("UPDATE users SET birthday=? WHERE email=?");
+    $query = $connection -> prepare("UPDATE users SET birthday=? WHERE email=?"); //Aggiorna la data di nascita nel DB all'utente corrisponente.
     $query -> bind_param("ss", $newDate, $email);
     $success = $query -> execute();
 

@@ -78,7 +78,7 @@ function checkForm()
         var period = document.getElementById(periods[i]);
         if(period == null)
         { continue; }
-
+ 
         if($("#start" + (i+1)).val() == "") //Se il campo data start-i è vuoto
         { 
             var errorMessage = "Aggiungere la data di inizio"; 
@@ -113,6 +113,15 @@ function checkForm()
             var errorMessage = "Aggiungere la descrizione"; 
             $("#description" + (i+1)).css("border-color", "rgba(200, 37, 37, 0.9)");
             $("#description" + (i+1)).css("border-width", "2px");
+            setError(errorMessage);
+            return false;
+        }
+
+        if(document.getElementById("images" + (i + 1)).files.length == 0)
+        {
+            var errorMessage = "Aggiungere almeno un'immagine";
+            $("#images" + (i+1)).css("border-color", "rgba(200, 37, 37, 0.9)");
+            $("#images" + (i+1)).css("border-width", "2px");
             setError(errorMessage);
             return false;
         }
