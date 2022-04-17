@@ -131,8 +131,8 @@
         <!-- Jquery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-        <script>$(document).ready(function (){refreshVoteAvg(<?php echo "\"$id\"" ?>);});</script> <!-- Chiamo le due funzioni che inizializzano i commenti e la media voti -->
-        <script>$(document).ready(function() {reloadComments(<?php echo "\"$id\"" ?>);});</script>
+        <script>$(document).ready(function (){ refreshVoteAvg(<?php echo "\"$id\"" ?>); });</script> <!-- Chiamo le due funzioni che inizializzano i commenti e la media voti -->
+        <script>$(document).ready(function() { reloadComments(<?php echo "\"$id\"" ?>); });</script>
 
         <!-- Navbar -->
 

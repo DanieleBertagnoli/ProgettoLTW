@@ -15,7 +15,7 @@
 
     if(!$success)
     { 
-        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento del nuovo itinerario. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento del nuovo itinerario a causa dell'interrogazione del database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
         header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); 
         exit();
     }
