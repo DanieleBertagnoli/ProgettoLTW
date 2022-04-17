@@ -1,6 +1,7 @@
 <?php
 
     session_start(); //Avvio la sessione
+    $email = $_SESSION['email'];
 
 ?>
 
@@ -87,7 +88,7 @@
                                     <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll">
 
                                         <li class="nav-item">
-                                            <a class="nav-link active" aria-current="page" href="Logged/homePage.php">Home</a> <!-- Link alla home -->
+                                            <a class="nav-link active" aria-current="page" href="../Logged/homePage.php">Home</a> <!-- Link alla home -->
                                         </li>
                             
                                         <li class="nav-item">
@@ -99,23 +100,23 @@
                                     <ul class="navbar-nav ms-3 me-2 my-2 my-lg-0 navbar-nav-scroll">
                     
                                         <li class="nav-item">
-                                            <a class="nav-link" href="Logged/myFriends.php" aria-disabled="true">I miei amici</a> 
+                                            <a class="nav-link" href="../Logged/myFriends.php" aria-disabled="true">I miei amici</a> 
                                         </li>
                     
                                         <li class="nav-item">
-                                            <a class="nav-link" href="Logged/myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
+                                            <a class="nav-link" href="../Logged/myRequestsPage.php" aria-disabled="true">Richieste di amicizia</a> 
                                         </li>
                     
                                         <li class="nav-item">
-                                            <a class="nav-link" href="Logged/userTripsPage.php?user=<?php echo $email; ?>" aria-disabled="true">I miei viaggi</a> 
+                                            <a class="nav-link" href="../Logged/userTripsPage.php?user=' . $email . '" aria-disabled="true">I miei viaggi</a> 
                                         </li>
                     
                                         <li class="nav-item">
-                                            <a class="nav-link" href="Logged/myProfilePage.php" aria-disabled="true">Profilo</a> <!-- Link al profilo utente -->
+                                            <a class="nav-link" href="../Logged/myProfilePage.php" aria-disabled="true">Profilo</a> <!-- Link al profilo utente -->
                                         </li>
                     
                                         <li class="nav-item">
-                                            <a class="nav-link" href="Logged/Utility/PHP/logout.php" aria-disabled="true">Disconnettiti</a> <!-- Link alla pagina di logout -->
+                                            <a class="nav-link" href="../Logged/Utility/PHP/logout.php" aria-disabled="true">Disconnettiti</a> <!-- Link alla pagina di logout -->
                                         </li>
                     
                                     </ul>';

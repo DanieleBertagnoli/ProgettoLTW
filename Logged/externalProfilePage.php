@@ -225,7 +225,7 @@
                     </div>
                     
                     <!-- Bottone che porta ai viaggi pubblicati dall\'utente -->
-                    <button class="btn-trip"><a href="userTripsPage.php?user=<?php echo $user; ?>">Viaggi dell\'utente</a></button>';
+                    <button class="btn-trip"><a href="userTripsPage.php?user=' . $user . '">Viaggi dell\'utente</a></button>';
                 }
             ?>
 
