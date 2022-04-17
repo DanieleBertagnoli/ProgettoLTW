@@ -60,7 +60,7 @@
     font-size: 25px;
 }
 
-.btn-trip
+.btn-trip, .btn-delete, .btn-disabled
 {
     width: fit-content;
     height: auto;
@@ -74,10 +74,28 @@
     font-size: 30px;
 }
 
+.btn-delete
+{ background-color: rgb(143, 0, 0); }
+
+.btn-disabled
+{
+    background-color: #6e6e6e;
+    pointer-events: none;
+}
+
 .general-container a
 {
     color: white;
     text-decoration: none;
+}
+
+.private-profile
+{
+    display: flex;
+    width: fit-content;
+    font-size: 25px;
+    height: auto;
+    margin: 4rem auto;
 }
 
 @media (max-width: 1250px)

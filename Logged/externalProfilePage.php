@@ -73,11 +73,12 @@
         exit();
     }
 
-    $row = $query -> get_result() -> fetch_assoc();
-    if(($row == 0 || ($row['pending'] == "1" && $row['user2'] == $user)) && $email != $user && $privacy == 1) //Se i due utenti non sono amici(oppure è la richiesta è ancora in attesa di essere accettata) e l'utente ha impostato la privacy a 1
+    $friendRequest = $query -> get_result() -> fetch_assoc();
+    if(($friendRequest == 0 || ($friendRequest['pending'] == "1" && $friendRequest['user2'] == $user)) && $email != $user && $privacy == 1) //Se i due utenti non sono amici(oppure è la richiesta è ancora in attesa di essere accettata) e l'utente ha impostato la privacy a 1
     { 
-        header("Location: privateProfilePage.php?user=$user"); //Redirect alla pagina di gestione delle richieste 
-        exit();
+        $hideProfile = 1;
+        //header("Location: privateProfilePage.php?user=$user"); //Redirect alla pagina di gestione delle richieste 
+        //exit();
     } 
 
     $admin = isAdmin(); //1 se l'utente è admin, 0 altrimenti
@@ -182,42 +183,63 @@
         <!-- General container -->
         <div class="general-container">
 
-            <!-- Profile container -->
-            <div class="profile-container">
+            <?php
+            
+                if($hideProfile == 1) //Il profilo va nascosto
+                { echo '<div class="private-profile">Il profilo dell\'utente è privato, effettua la richiesta e attendi che l\'utente la accetti per visualizzarlo</div>'; }
+                else
+                {
+                    echo '
+                    <!-- Profile container -->
+                    <div class="profile-container">
 
-                <!-- Container dell'immagine di profilo -->
-                <div class="image-container">
-                    <img class="profile-pic" src="<?php echo $profilePic; ?>" alt="">
-                </div> 
+                        <!-- Container dell\'immagine di profilo -->
+                        <div class="image-container">
+                            <img class="profile-pic" src="' . $profilePic.'" alt="">
+                        </div> 
 
-                <!-- Container delle informazioni -->
-                <div class="info-container">
+                        <!-- Container delle informazioni -->
+                        <div class="info-container">
 
-                    <!-- Username -->
-                    <h1 style="align-self: center"> <?php echo $username; ?> </h1>
-                        
-                    <!-- Email -->
-                    <p class="profile-label mt-5">Email: <?php echo $user; ?> </p>
-                    <hr class="profile-separator">
-                        
-                    <!-- Gender -->
-                    <p class="profile-label">Genere: <?php echo $gender; ?> </p>
-                    <hr class="profile-separator">
+                            <!-- Username -->
+                            <h1 style="align-self: center"> ' . $username . ' </h1>
+                                
+                            <!-- Email -->
+                            <p class="profile-label mt-5">Email: ' . $user . '</p>
+                            <hr class="profile-separator">
+                                
+                            <!-- Gender -->
+                            <p class="profile-label">Genere: ' . $gender . '</p>
+                            <hr class="profile-separator">
 
-                    <!-- Nazione -->
-                    <p class="profile-label">Nazione: <?php echo $country; ?> </p>
-                    <hr class="profile-separator">
+                            <!-- Nazione -->
+                            <p class="profile-label">Nazione: ' . $country . '</p>
+                            <hr class="profile-separator">
 
-                    <!-- Data di nascita -->
-                    <p class="profile-label">Data di nascita: <?php echo $birthDay; ?> </p>
-                    <hr class="profile-separator">
+                            <!-- Data di nascita -->
+                            <p class="profile-label">Data di nascita: ' . $birthDay . ' </p>
+                            <hr class="profile-separator">
 
-                </div>
+                        </div>
 
-            </div>
+                    </div>
+                    
+                    <!-- Bottone che porta ai viaggi pubblicati dall\'utente -->
+                    <button class="btn-trip"><a href="userTripsPage.php?user=<?php echo $user; ?>">Viaggi dell\'utente</a></button>';
+                }
+            ?>
 
-            <!-- Bottone che porta ai viaggi pubblicati dall'utente -->
-            <button class="btn-trip"><a href="userTripsPage.php?user=<?php echo $user; ?>">Viaggi dell'utente</a></button>
+            <!-- Bottone che permette di richiedere l'amicizia all'utente / rimuoverla -->
+            <?php
+            
+                if($friendRequest == 0) //I due utenti non sono amici
+                { echo "<button class=\"btn-trip mt-4\" id=\"requestButton\"><a href=\"Utility/PHP/insertFriend.php?user=$user\">Invia richiesta di amicizia</a></button>"; }
+                elseif($friendRequest != 0 && $friendRequest['pending'] == 1) //C'è una richiesta di amicizia in sospeso
+                { echo "<button class=\"btn-disabled mt-4\" id=\"requestButton\">Richiesta di amicizia in attesa</button>"; }
+                elseif($friendRequest != 0 && $friendRequest['pending'] == 0) //I due utenti sono amici
+                { echo "<button class=\"btn-delete mt-4\" id=\"requestButton\"><a href=\"Utility/PHP/removeFriend.php?user=$user\">Rimuovi dagli amici</a></button>"; }
+            
+            ?>
 
         </div>
 

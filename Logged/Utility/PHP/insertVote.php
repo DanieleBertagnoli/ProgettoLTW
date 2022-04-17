@@ -5,19 +5,25 @@
 
     session_start(); //Fai partire la sessione.
 
-    if(!isset($_GET['vote']) || !isset($_GET['tripID']) || !$connection) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
-    { return; }
+    if(!isset($_POST['vote']) || !isset($_POST['tripID']) || !$connection) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
+    { 
+        echo "parametri";
+        return; 
+    }
 
     $email = $_SESSION['email'];
-    $vote = $_GET['vote'];
-    $tripID = $_GET['tripID'];
+    $vote = $_POST['vote'];
+    $tripID = $_POST['tripID'];
 
     $query = $connection -> prepare("SELECT * FROM votes WHERE user=? AND trip=?"); //Seleziona la riga con il voto creato dall'utente corrispondente al trip corrente.
     $query -> bind_param("si", $email, $tripID);
     $success = $query -> execute();
 
     if(!$success) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
-    { return; }
+    {
+        echo "select"; 
+        return; 
+    }
 
     $result = $query -> get_result();
     $row = $result -> fetch_assoc();
@@ -29,7 +35,10 @@
         $success = $query -> execute();
 
         if(!$success) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
-        { return; }
+        { 
+            echo "insert";
+            return;
+        }
     }
     else
     {
@@ -39,7 +48,10 @@
         $success = $query -> execute();
 
         if(!$success) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
-        { return; }
+        { 
+            echo "update";
+            return; 
+        }
     }
 
     mysqli_close($connection);

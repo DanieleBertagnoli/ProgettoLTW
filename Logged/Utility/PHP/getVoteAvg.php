@@ -5,17 +5,23 @@
 
     session_start();
 
-    if(!isset($_GET['tripID']) || !$connection) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
-    { return; }
+    if(!isset($_POST['tripID']) || !$connection) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
+    {
+        echo "parametri"; 
+        return; 
+    }
 
-    $tripID = $_GET['tripID'];
+    $tripID = $_POST['tripID'];
 
     $query = $connection -> prepare("SELECT AVG(vote) as avg FROM votes WHERE trip=?"); //Ottengo la media di tutti i voti per l'itinerario
     $query -> bind_param("i", $tripID);
     $success = $query -> execute();
 
     if(!$success) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
-    { return; }
+    { 
+        echo "select";
+        return; 
+    }
 
     $result = $query -> get_result();
     $row = $result -> fetch_assoc();

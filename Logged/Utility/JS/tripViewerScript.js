@@ -11,44 +11,83 @@ function changeStarLevel(lvl)
 
 function sendVote(vote, tripID)
 {
-    var httpRequest = new XMLHttpRequest();
-    httpRequest.open("GET", "./Utility/PHP/insertVote.php?tripID=" + tripID + "&vote=" + vote, true); //Invio il voto
-    httpRequest.send(null);
-    httpRequest.onreadystatechange = () => 
+    $.post("Utility/PHP/insertVote.php", 
     { 
-        if(httpRequest.readyState == 4 && httpRequest.status == 500) //Se la richiesta non va a buon fine
-        {  
+        tripID: tripID, 
+        vote: vote
+    }, function(data, status)
+    {
+        if(status != "success")
+        {
             var errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento del nuovo voto. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+            if(document.getElementById("voteError") == null)
+            { document.getElementById("starSection").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible mb-5" id="voteError" style="width:90%; align-self:center;"></div>'); }
             $("#voteError").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"voteError\")\'></button>"); //Aggiungo l'HTML interno alla div
-            $("#voteError").css("visibilty", "visible");
         }
+        else
+        {
+            var errorMessage = "";
 
-        if(httpRequest.readyState == 4 && httpRequest.status == 200) //Altrimenti cambio il colore delle stelle
-        { changeStarLevel(vote); }
-    }
+            if(data == "parametri") //Se la risposta è la stringa "parametri" allora c'è stato un errore con i parametri passati
+            { errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento del nuovo voto a causa di alcuni parametri mancanti o di mancata connessione al database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
+            if(data == "select") //Se la risposta è la stringa "select" allora c'è stato un errore durante l'ottenimento della media dei voti
+            { errorMessage = "Siamo spiacenti, si è verificato un errore durante la verifica del voto. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
+            if(data == "update") //Se la risposta è la stringa "select" allora c'è stato un errore durante l'ottenimento della media dei voti
+            { errorMessage = "Siamo spiacenti, si è verificato un errore durante l'aggiornamento del voto dell'itinerario. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
+            if(data == "insert") //Se la risposta è la stringa "select" allora c'è stato un errore durante l'ottenimento della media dei voti
+            { errorMessage = "Siamo spiacenti, si è verificato un errore durante l'inserimento del voto dell'itinerario. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
+            if(errorMessage != "")
+            {
+                if(document.getElementById("voteError") == null)
+                { document.getElementById("starSection").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible mb-5" id="voteError" style="width:90%; align-self:center;"></div>'); }
+                $("#voteError").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"voteError\")\'></button>"); //Aggiungo l'HTML interno alla div
+            }
+            else
+            { changeStarLevel(vote); }
+        }
+    });
+
     refreshVoteAvg(tripID);
 }
 
 function refreshVoteAvg(tripID)
 {
-    var httpRequest = new XMLHttpRequest();
-    httpRequest.open("GET", "./Utility/PHP/getVoteAvg.php?tripID=" + tripID, true); //Richiedo la media dei voti del trip
-    httpRequest.send(null);
-    httpRequest.onreadystatechange = () => 
-    { 
-        if(httpRequest.readyState == 4 && httpRequest.status == 200) //Se la richeista va a buon fine 
+    $.post("Utility/PHP/getVoteAvg.php", { tripID: tripID }, function(data, status)
+    {
+        if(status != "success")
         {
-            var newAvg = httpRequest.responseText; 
-            $("#voteAvg").html("Gli altri utenti hanno votato: " + newAvg + "/5"); //Aggiorno l'etichetta della media dei voti
-        }
-
-        if(httpRequest.readyState == 4 && httpRequest.status == 500) //Se la richiesta non va a buon fine 
-        {  
             var errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento dei voti. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+            if(document.getElementById("voteError") == null)
+            { document.getElementById("starSection").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible mb-5" id="voteError" style="width:90%; align-self:center;"></div>'); }
             $("#voteError").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"voteError\")\'></button>"); //Aggiungo l'HTML interno alla div
-            $("#voteError").css("visibility", "visible");
         }
-    }
+        else
+        {
+            var errorMessage = "";
+
+            if(data == "parametri") //Se la risposta è la stringa "parametri" allora c'è stato un errore con i parametri passati
+            { errorMessage = "Siamo spiacenti, si è verificato un errore durante l'ottenimento della media dei voti dell'itinerario a causa di alcuni parametri mancanti o di mancata connessione al database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
+            if(data == "select") //Se la risposta è la stringa "select" allora c'è stato un errore durante l'ottenimento della media dei voti
+            { errorMessage = "Siamo spiacenti, si è verificato un errore durante l'ottenimento della media dei voti dell'itinerario. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
+            if(errorMessage != "")
+            {
+                if(document.getElementById("voteError") == null)
+                { document.getElementById("starSection").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible mb-5" id="voteError" style="width:90%; align-self:center;"></div>'); }
+                $("#voteError").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"voteError\")\'></button>"); //Aggiungo l'HTML interno alla div
+            }
+            else
+            { 
+                var newAvg = data;
+                $("#voteAvg").html("Gli altri utenti hanno votato: " + newAvg + "/5"); //Aggiorno l'etichetta della media dei voti
+            }
+        }
+    });
 }
 
 function checkButton()
@@ -61,22 +100,40 @@ function checkButton()
 }
 
 function sendComment(tripID)
-{
-    var httpRequest = new XMLHttpRequest();
-    httpRequest.open("GET", "./Utility/PHP/insertNewComment.php?tripID=" + tripID + "&commentText=" + $("#commentText").val().trim(), true); //Invio il nuovo commento
-    httpRequest.send(null);
-    httpRequest.onreadystatechange = () =>
+{  
+    $.post("Utility/PHP/insertNewComment.php", 
+    { 
+        tripID: tripID, 
+        commentText: $("#commentText").val().trim() 
+    }, function(data, status)
     {
-        if(httpRequest.readyState == 4 && httpRequest.status == 200) //Se la richiesta va a buon fine
-        { reloadComments(tripID); } //Aggiorno i commenti
-
-        if(httpRequest.readyState == 4 && httpRequest.status == 500) //Se la richiesta non va a buon fine
-        {  
+        if(status != "success")
+        {
             var errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento del nuovo commento. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+            if(document.getElementById("commentError") == null)
+            { document.getElementById("commentsContainer").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible mb-5" id="commentError" style="width:90%; align-self:center;"></div>'); }
             $("#commentError").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"commentError\")\'></button>"); //Aggiungo l'HTML interno alla div
-            $("#commentError").css("visibility", "visible");
         }
-    }
+        else
+        {
+            var errorMessage = "";
+
+            if(data == "parametri") //Se la risposta è la stringa "parametri" allora c'è stato un errore con i parametri passati
+            { errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento del nuovo commento a causa di alcuni parametri mancanti o di mancata connessione al database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
+            if(data == "insert") //Se la risposta è la stringa "insert" allora c'è stato un errore durante l'insertimento del nuovo commento
+            { errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento del nuovo commento. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
+            if(errorMessage != "")
+            {
+                if(document.getElementById("commentError") == null)
+                { document.getElementById("commentsContainer").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible mb-5" id="commentError" style="width:90%; align-self:center;"></div>'); }
+                $("#commentError").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"commentError\")\'></button>"); //Aggiungo l'HTML interno alla div
+            }
+            else
+            { reloadComments(tripID); } //Ricarico i commenti
+        }
+    });
 
     $("#commentText").val(""); //Rimuovo il testo dalla casella del commento
     $("#commentButton").addClass("btn-disabled"); //Disabilito il bottone di invio
@@ -86,39 +143,53 @@ function sendComment(tripID)
 
 function reloadComments(tripID)
 {
-    var httpRequest = new XMLHttpRequest();
-    httpRequest.open("GET", "./Utility/PHP/getComments.php?tripID=" + tripID, true); //Richiedo i commenti dell'itinerario
-    httpRequest.send(null);
-    httpRequest.onreadystatechange = () =>
+    $.post("Utility/PHP/getComments.php", { tripID: tripID }, function(data, status)
     {
-        if(httpRequest.readyState == 4 && httpRequest.status == 200) //Se la richiesta va a buon fine
-        { 
-            var comments = httpRequest.responseText; 
-            comments = comments.split("~(~~)~"); //Suddivido la stringa ottenuta
-            var allCommentsDiv = "";
-            for(var i=comments.length-5; i>=0; i-=4) //Per ogni commento creo una div personalizzata
-            {
-                var email = comments[i];
-                var date = comments[i+1];
-                var text = comments[i+2];
-                var username = comments[i+3];
-
-                allCommentsDiv = allCommentsDiv +   '<div class=\"comment\">' +  
-                                                    '<h2><a href="externalProfilePage.php?user=' + email + '">' + username + '</a></h2>' +
-                                                    '<p class=\"text\">' + text + '</p>' +
-                                                    '<p class=\"date\">' + date + '</p>' +
-                                                    '</div>';
-            }
-            $("#oldComments").html(allCommentsDiv); //Imposto i nuovi commenti
-        }
-
-        if(httpRequest.readyState == 4 && httpRequest.status == 500) //Se la richiesta non va a buon fine
-        {  
+        if(status != "success")
+        {
             var errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento dei commenti. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+            if(document.getElementById("commentError") == null)
+            { document.getElementById("commentsContainer").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible mb-5" id="commentError" style="width:90%; align-self:center;"></div>'); }
             $("#commentError").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"commentError\")\'></button>"); //Aggiungo l'HTML interno alla div
-            $("#comment-error").css("visibility", "visible");
         }
-    }
+        else
+        {
+            var errorMessage = "";
+
+            if(data == "parametri") //Se la risposta è la stringa "parametri" allora c'è stato un errore con i parametri passati
+            { errorMessage = "Siamo spiacenti, si è verificato un errore durante l'aggiornamento dei commenti dell'itinerario a causa di alcuni parametri mancanti o di mancata connessione al database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
+            if(data == "select") //Se la risposta è la stringa "select" allora c'è stato un errore durante l'ottenimento dei commenti
+            { errorMessage = "Siamo spiacenti, si è verificato un errore durante l'ottenimento dei commenti dell'itinerario. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
+            if(errorMessage != "")
+            {
+                if(document.getElementById("commentError") == null)
+                { document.getElementById("commentsContainer").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible mb-5" id="commentError" style="width:90%; align-self:center;"></div>'); }
+                $("#commentError").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"commentError\")\'></button>"); //Aggiungo l'HTML interno alla div
+            }
+            else
+            {
+                var comments = data; 
+                comments = comments.split("~(~~)~"); //Suddivido la stringa ottenuta
+                var allCommentsDiv = "";
+                for(var i=comments.length-5; i>=0; i-=4) //Per ogni commento creo una div personalizzata
+                {
+                    var email = comments[i];
+                    var date = comments[i+1];
+                    var text = comments[i+2];
+                    var username = comments[i+3];
+    
+                    allCommentsDiv = allCommentsDiv +   '<div class=\"comment\">' +  
+                                                        '<h2><a href="externalProfilePage.php?user=' + email + '">' + username + '</a></h2>' +
+                                                        '<p class=\"text\">' + text + '</p>' +
+                                                        '<p class=\"date\">' + date + '</p>' +
+                                                        '</div>';
+                }
+                $("#oldComments").html(allCommentsDiv); //Imposto i nuovi commenti
+            }
+        }
+    });
 }
 
 function openPopup(index)
@@ -147,4 +218,4 @@ function closePopup()
 }
 
 function setInvisible(element)
-{ $("#" + element).css("visibility", "hidden"); }
+{ $("#" + element).remove(); }

@@ -5,12 +5,15 @@
 
     session_start(); //Avvio la sessione
 
-    if(!isset($_GET['commentText']) || !isset($_GET["tripID"]) || !$connection) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
-    { return; }
+    if(!isset($_POST['commentText']) || !isset($_POST["tripID"]) || !$connection) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
+    {
+        echo "parametri"; 
+        return; 
+    }
 
     $email = $_SESSION['email'];
-    $tripID = $_GET['tripID'];
-    $text = $_GET['commentText'];
+    $tripID = $_POST['tripID'];
+    $text = $_POST['commentText'];
     
     $currentDate = new DateTime();
 
@@ -20,6 +23,10 @@
     $success = $query -> execute();
 
     if(!$success) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
-    { return; }
-
+    { 
+        echo "insert";
+        return; 
+    }
+    
+    echo "ok";
 ?>

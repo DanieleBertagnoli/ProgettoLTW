@@ -5,7 +5,7 @@
 
     if(!$connection) //Se la connessione al database non è andata a buon fine
     {
-        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di visualizzazione delle segnalazioni a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
         header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
         exit();
     }
@@ -22,7 +22,7 @@
 
     if(!$success) //Se la query è andata a buon fine
     { 
-        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della Home page. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di visualizzazione delle segnalazioni a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
         header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
         exit();
     }

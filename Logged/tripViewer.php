@@ -4,7 +4,7 @@
    
     if(!$connection) //Se la connessione al database non è andata a buon fine
     {
-        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di inserimento di un nuovo itinerario a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina dell'itinerario a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
         header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
         exit();
     }
@@ -236,10 +236,8 @@
               <img class="img-popup" id="bigImage">
             </div>
 
-            <div class="alert alert-danger d-flex align-items-end alert-dismissible" id="voteError" style="visibility: hidden;  width:90%; align-self:center;"></div> <!-- Div all'interno della quale viene inserito un messaggio di errore da check() -->
-
             <!-- Sezione con le stelle -->
-            <section name="star-section" class="star-container">
+            <section id="starSection" class="star-container">
 
                 <div style="display: flex; align-items:center; margin-bottom: 30px; flex-wrap: wrap">
 
@@ -259,10 +257,8 @@
 
             </section>
 
-            <div class="alert alert-danger d-flex align-items-end alert-dismissible mb-5" id="commentError" style="visibility: hidden; width:90%; align-self:center;"></div> <!-- Div all'interno della quale viene inserito un messaggio di errore da check() -->
-
             <!-- Sezione con i commenti -->
-            <div class="comments-container">
+            <div class="comments-container" id="commentsContainer">
 
                 <div class="comment-editor" id="commentCreator">
                     <textarea id="commentText" name="comment-text" class="comment-text" maxlength="500" placeholder="Inserisci un commento..." oninput='this.style.height="auto"; this.style.height = this.scrollHeight + "px"; checkButton()'></textarea>

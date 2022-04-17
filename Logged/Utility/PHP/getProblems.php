@@ -4,7 +4,10 @@
     $connection = initConnection(); //Inizializzo la connessione con il database e controllo se l'utente è loggato
 
     if(!isset($_POST['start']) || !isset($_POST['end']) || !$connection) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
-    { return; }
+    { 
+        echo "parametri";
+        return;
+    }
 
     $start = $_POST['start'];
     $end = $_POST['end'];
@@ -14,7 +17,10 @@
     $success = $query -> execute();
 
     if(!$success) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
-    { return; }
+    {
+        echo "select";
+        return; 
+    }
 
     $result = $query -> get_result();
 

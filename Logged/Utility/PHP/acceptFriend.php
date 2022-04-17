@@ -6,7 +6,7 @@
     if(!$connection) //Se la connessione con il database non è andata a buon fine
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il l'accettazione dell'amicizia a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
         exit();
     }
 
@@ -15,7 +15,7 @@
     if(!isset($_GET['user'])) //Se il paramentro non è impostato
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il l'accettazione dell'amicizia a causa della mancanza alcuni parametri necessari. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
         exit();
     }
 
@@ -29,14 +29,15 @@
     if(!$success) //Se la query non va a buon fine
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante l'invio della richiesta di amicizia. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
         exit();
     }
 
-    $row = $query -> get_result() -> fetch_assoc();
-    if($row != 0) //Se non esiste una richiesta in sospeso
+    $result = $query -> get_result();
+    $row = $result -> fetch_assoc();
+    if($row == 0) //Se non esiste una richiesta in sospeso
     { 
-        header("../../privateProfilePage.php?user=$user"); //Redirect alla pagina dell'utente
+        header("Location: ../../externProfilePage.php?user=$user"); //Redirect alla pagina dell'utente
         exit(); 
     }
 
@@ -47,7 +48,7 @@
     if(!$success) //Se la query non va a buon fine
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante l'invio della richiesta di amicizia. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
         exit();
     }
 

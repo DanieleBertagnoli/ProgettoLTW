@@ -34,9 +34,12 @@ function confirmGender()
                 var errorMessage = "";
                 
                 if(data == "update") //Se la risposta è la stringa "update" allora c'è stato un errore durante l'update nel database
-                { errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio del genere. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+                { errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio del genere a causa del mancato aggiornamento del database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
                 
-                if(data!= "ok") //Se la risposta non è stata la stringa ok, creo il popup di errore
+                if(data == "parametri") //Se la risposta è la stringa "parametri" allora c'è stato un errore con i parametri passati
+                { errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio del genere a causa di alcuni parametri mancanti o di mancata connessione al database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
+                if(data != "ok") //Se la risposta non è stata la stringa ok, creo il popup di errore
                 {
                     if(document.getElementById("errorMessageGender") == null) //Se non esiste l'elemento lo creo
                     { document.getElementById("genderElement").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible" id="errorMessageGender" style="height: fit-content"></div>'); }
@@ -197,8 +200,11 @@ function confirmCountry()
                 var errorMessage = "";
                 
                 if(data == "update") //Se la risposta è la stringa "update" allora c'è stato un errore durante l'update
-                { errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio della nazione. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+                { errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio della nazione a causa del mancato aggiornamento del database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
                 
+                if(data == "parametri") //Se la risposta è la stringa "parametri" allora c'è stato un errore con i parametri passati
+                { errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio della nazione a causa di alcuni parametri mancanti o di mancata connessione al database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
                 if(data != "ok") //Se la risposta non è stata la stringa ok, creo il popup di errore
                 {
                     if(document.getElementById("errorMessageCountry") == null) //Se non esiste l'elemento lo creo
@@ -253,8 +259,11 @@ function confirmDate()
                 var errorMessage = "";
                 
                 if(data == "update") //Se la risposta è la stringa "update" allora c'è stato un errore durante l'update
-                { errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio della data di nascita. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+                { errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio della data di nascita a causa del mancato aggiornamento del database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
                 
+                if(data == "parametri") //Se la risposta è la stringa "parametri" allora c'è stato un errore con i parametri passati
+                { errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio della data di nascita a causa di alcuni parametri mancanti o di mancata connessione al database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
                 if(data != "ok") //Se la risposta non è stata la stringa ok, creo il popup di errore
                 {
                     if(document.getElementById("errorMessageDate") == null)

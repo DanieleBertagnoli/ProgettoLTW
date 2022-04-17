@@ -164,7 +164,7 @@
 
                     <!-- Form per il cambio di immagine profilo -->
                     <form action="Utility/PHP/updateProfilePic.php" method="POST" id="imageForm" enctype="multipart/form-data">
-                        <label class="btn-image" for="imagePicker">Cambia Immagine</label>
+                        <label class="btn-image text-nowrap" for="imagePicker">Cambia Immagine</label>
                         <input style="visibility: hidden; height: 0px; width: 0px;" type="file" name="imagePicker[]" id="imagePicker" accept="image/png, image/jpg, image/jpeg" onchange='document.getElementById("imageForm").submit()'>
                     </form>
 

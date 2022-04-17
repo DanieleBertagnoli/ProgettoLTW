@@ -6,7 +6,10 @@
     session_start(); //Inizializza la sessione
 
     if(!isset($_POST['newGender']) || !$connection) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
-    { return; }
+    { 
+        echo "parametri";
+        return;
+    }
 
     $email = $_SESSION['email'];
     $newGender = $_POST['newGender'];

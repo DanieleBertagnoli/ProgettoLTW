@@ -8,7 +8,7 @@
     if(!$connection)
     {
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il l'invio della richiesta di amicizia, a cause di una mancata connessione al DataBase. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); 
         exit();
 
     }
@@ -16,7 +16,7 @@
     if(!isset($_GET['user'])) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il l'invio della richiesta di amicizia, non sono presenti alcuni parametri necessari. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); 
         exit();
     }
 
@@ -30,7 +30,7 @@
     if(!$success)
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante l'esecuzione dell'operazione. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); 
         exit();
     }
 
@@ -39,7 +39,7 @@
     if($row == 0) //Se non e' presente alcuna richiesta riporta l'utente alla pagina di errore.
     {
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante l'esecuzione dell'operazione, non e' stato possibile trovare la richiesta cercata. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); 
         exit();
     }
 
@@ -50,7 +50,7 @@
     if(!$success)
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante l'esecuzione dell'operazione. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); 
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); 
         exit();
     }
 

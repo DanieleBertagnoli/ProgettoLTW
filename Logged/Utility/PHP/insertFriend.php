@@ -3,10 +3,10 @@
     require "initConnection.php";
     $connection = initConnection(); //Inizializzo la connessione con il database e controllo se l'utente è loggato
 
-    if(!$connection)
+    if(!$connection) //Se la connessione non va a buon fine
     {
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il l'invio della richiesta di amicizia a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
         exit(); 
     }
 
@@ -15,7 +15,7 @@
     if(!isset($_GET['user'])) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il l'invio della richiesta di amicizia a causa della mancanza di alcuni parametri necessari. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
         exit();
     }
 
@@ -29,14 +29,15 @@
     if(!$success) //Se la query non va a buon fine
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante l'invio della richiesta di amicizia. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
         exit();
     }
 
-    $row = $query -> get_result() -> fetch_assoc();
+    $result = $query -> get_result();
+    $row = $result -> fetch_assoc();
     if($row != 0) //Se è già presente un'amicizia 
     {
-        header("../../externalProfilePage.php?user=$user"); //Redirect alla pagina dell'utente
+        header("Location: ../../externalProfilePage.php?user=$user"); //Redirect alla pagina dell'utente
         exit(); 
     }
 
@@ -47,7 +48,7 @@
     if(!$success) //Se la query non va a buon fine
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante l'invio della richiesta di amicizia. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+        header("Location: ../../errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
         exit();
     }
 
