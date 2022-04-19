@@ -37,6 +37,7 @@
     $result = $query -> get_result();
 
     $trips = array();
+    $users = array();
     while($row = $result -> fetch_assoc())
     { $trips[] = $row; } //Inserisco tutti gli itinerari ottenuti in un array indicizzato
 
@@ -75,8 +76,37 @@
             if(!$in) //Se è presente non lo aggiungo
             { $trips[] = $row; } 
         }
-    }
-    
+
+        $temp = "%" . $splitKeywords[$i] . "%";
+        $query = $connection -> prepare('SELECT * FROM users WHERE LOWER(username) LIKE ?'); //Ottengo tutti gli utenti il cui username contiene le parole ricercate
+        $query -> bind_param("s", $temp);
+        $success = $query -> execute();
+
+        if(!$success) //Se la query non va a buon fine
+        { 
+            $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina con i risultati della ricerca. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+            header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+            exit();
+        }
+        
+        $result = $query -> get_result();
+        while($row = $result -> fetch_assoc()) //Per ogni riga della query
+        {
+            $in = false;
+            for($j=0; $j<count($users); $j++)
+            {
+                if($users[$j]['email'] == $row['email']) //Controllo se l'email dell'utente della query è già presente nell'array degli utenti selezionati
+                { 
+                    $in = true; 
+                    break; 
+                }
+            }
+
+            if(!$in) //Se è presente non lo aggiungo
+            { $users[] = $row; }
+        }
+    }    
+
     mysqli_close($connection);
 ?>
 
@@ -211,6 +241,34 @@
             ?>
 
         </div>
+
+        <!-- Stampo il numero di utenti -->
+        <?php
+
+            $usersNum = count($users);
+            if($usersNum != 0)
+            { echo "<h1 class=\"text-center mt-5\"> $usersNum utenti trovati per: \"$keywords\"</h1>"; }
+
+        ?>
+
+            <!-- General container -->
+            <div class="general-container mt-3 mb-3">
+
+                <?php
+
+                    for($i=0; $i<$usersNum; $i++) //Per ogni amico trovato, stampo una div personalizzata
+                    {
+                        $user = $users[$i];
+
+                        $userDiv = "<div class=\"user\">";
+                        $userDiv = $userDiv . '<a href="externalProfilePage.php?user=' . $user["email"] . '"><img class="user-img" src="../ProfilePics/' . $user["email"] . '"><h1 class="text-center">' . $user["username"] . '</h1></a>';
+                        $userDiv = $userDiv . "</div>";
+                        echo $userDiv;
+                    }
+
+                ?>
+
+            </div>
 
     </body>
 </html>

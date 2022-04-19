@@ -232,11 +232,11 @@
             <!-- Bottone che permette di richiedere l'amicizia all'utente / rimuoverla -->
             <?php
             
-                if($friendRequest == 0) //I due utenti non sono amici
+                if($friendRequest == 0 && $email != $user) //I due utenti non sono amici e non sono lo stesso utente
                 { echo "<button class=\"btn-trip mt-4\" id=\"requestButton\"><a href=\"Utility/PHP/insertFriend.php?user=$user\">Invia richiesta di amicizia</a></button>"; }
-                elseif($friendRequest != 0 && $friendRequest['pending'] == 1) //C'è una richiesta di amicizia in sospeso
+                elseif($friendRequest != 0 && $friendRequest['pending'] == 1 && $email != $user) //C'è una richiesta di amicizia in sospeso
                 { echo "<button class=\"btn-disabled mt-4\" id=\"requestButton\">Richiesta di amicizia in attesa</button>"; }
-                elseif($friendRequest != 0 && $friendRequest['pending'] == 0) //I due utenti sono amici
+                elseif($friendRequest != 0 && $friendRequest['pending'] == 0 && $email != $user) //I due utenti sono amici
                 { echo "<button class=\"btn-delete mt-4\" id=\"requestButton\"><a href=\"Utility/PHP/removeFriend.php?user=$user\">Rimuovi dagli amici</a></button>"; }
             
             ?>

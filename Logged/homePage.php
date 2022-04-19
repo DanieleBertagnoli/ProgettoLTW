@@ -258,7 +258,7 @@
                 <a href="newTripPage.php"><button class="btn-add">Crea itinerario</button></a> <!-- Bottone per creare un nuovo itinerario -->
 
                 <form id="searchForm" class="search-form" action="searchResult.php" method="POST" onsubmit="return checkForm();"> <!-- Form per la ricerca di itinerari -->
-                    <input id="searchBox" name="searchBox" class="search-box" type="text" placeholder="Cerca un itinerario...">
+                    <input id="searchBox" name="searchBox" class="search-box" type="text" placeholder="Cerca un itinerario o un utente...">
                     <button class="btn-search" type="submit"><i class="bi bi-search"></i></button>
                 </form>
 
