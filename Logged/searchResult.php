@@ -45,6 +45,9 @@
 
     for($i=0; $i<count($splitKeywords); $i++) //Per ogni parola
     {
+        if($splitKeywords[$i] == "")
+        { continue; }
+
         $temp = "% ".$splitKeywords[$i]." %";
         $temp2 = "%,".$splitKeywords[$i].",%";
         $temp3 = "%,".$splitKeywords[$i]." %";

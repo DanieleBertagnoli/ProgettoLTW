@@ -46,6 +46,7 @@
 
         if($success) //Se la query va a buon fine
         { 
+            copy("../Media/defaultProfilePic", "../ProfilePics/$email"); //Imposto l'immagine di profilo default
             header("Location: successPage.html"); //Redirect alla pagina di successo
             exit();
         } 

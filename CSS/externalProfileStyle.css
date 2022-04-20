@@ -74,6 +74,9 @@
     font-size: 30px;
 }
 
+.btn-trip:hover, .btn-delete:hover
+{ background-color: #008867; }
+
 .btn-delete
 { background-color: rgb(143, 0, 0); }
 

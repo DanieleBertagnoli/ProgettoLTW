@@ -1,5 +1,3 @@
-/* Main section */
-
 .main
 {
     position: relative;
@@ -97,6 +95,12 @@
     background-color: #164995;
     border: none;
     outline: none;
+}
+
+a, a:hover
+{
+    text-decoration: none;
+    color: white;
 }
 
 .poster button:hover

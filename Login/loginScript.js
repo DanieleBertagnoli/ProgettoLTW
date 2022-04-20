@@ -6,7 +6,7 @@ function check()
     { 
         $("#password").css("border-color", "rgba(200, 37, 37, 0.9)"); //Aggiungo i bordi rossi di 2px al campo password
         $("#password").css("border-width", "2px");
-        errorMessage = "Inserire la della password"; 
+        errorMessage = "Inserire la password"; 
     }
 
     if($("#email").val() == "") //Se l'email è vuota
