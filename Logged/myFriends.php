@@ -14,7 +14,7 @@
 
     $email = $_SESSION['email']; //Salvo  l'email dell'utente loggato
 
-    $query = $connection -> prepare("SELECT user1 as user, username FROM friends, users WHERE user2=? AND pending=0 AND user1=email"); //Ottengo gli utenti che sono amici con l'utente loggato
+    $query = $connection -> prepare("SELECT friends.user1 as user, users.username as username FROM friends, users WHERE user2=? AND pending=0 AND user1=email"); //Ottengo gli utenti che sono amici con l'utente loggato
     $query -> bind_param("s", $email);
     $success = $query -> execute();
 
@@ -30,7 +30,7 @@
     while($row = $result -> fetch_assoc())
     { $friends[] = $row; } //Inserisco tutti gli utenti in un array indicizzato
 
-    $query = $connection -> prepare("SELECT user2 as user, username FROM friends, users WHERE user1=? AND pending=0 AND user2=email");
+    $query = $connection -> prepare("SELECT friends.user2 as user, users.username as username FROM friends, users WHERE user1=? AND pending=0 AND user2=email");
     $query -> bind_param("s", $email);
     $success = $query -> execute();
 
