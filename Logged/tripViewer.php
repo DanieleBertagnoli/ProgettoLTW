@@ -45,7 +45,6 @@
     //Prendo tutti i relativi campi della query, e toglo i caratteri di sistema.
     $wholeDescription = $row['description']; 
     $descriptions = explode("~(~~)~", $wholeDescription);
-    $numPeriods = count($descriptions) - 1;
     $carouselCells = ""; //stringa usata per accumulare le stringhe dei caroselli.
     $counter = 1; //Contatore di immagini all'interno di tutti i periodi.
 
@@ -213,20 +212,25 @@
 
             <?php
 
-                for($i = 1; $i <= $numPeriods; $i++) //Per ogni periodo nel viaggio.
+                $i = 1;
+                $counter = 1;
+                foreach(scandir("../TripImages/$id") as $folder) //Per ogni periodo nel viaggio.
                 {
+                    if(!is_dir("../TripImages/$id/$folder") || $folder == "." || $folder == "..")
+                    { continue; }
+
                     $carouselCells = "";
                     while(true)
                     {
                         //Non potendo estrapolare il numero preciso di immagini, iteriamo finche' non troviamo piu' immagini corrispondenti.
-                        $currentImage = "../TripImages/" . $id . "/period-" . $i . "/" . $id . "-" . $counter;
+                        $currentImage = "../TripImages/$id/$folder/$id-$counter";
                         if(!is_file($currentImage)) //Se non e' un file (abbiamo finite le immagini del period) esci.
                         { break; }
                         $counter = $counter + 1; //Aumento il counter e creo la singola cella del carosello.
                         $carouselCells = $carouselCells . " " . "<div id=\"carouselCell-" . $counter . "\" class=\"carousel-cell\" onclick=\"openPopup(" . $counter . ")\" style=\"name: ciao; background: url('" . $currentImage . "') no-repeat center center; 
                         background-size: cover; overflow: hidden;\"></div>"; //Cliccando sulla cella si potra' ingrandire l'immagine.
                     }
-                    
+
                     echo "<div class=\"view-container\">";
                     
                     echo "<div style=\"heigth: 80%\" data-flickity='{ \"cellAlign\": \"left\", \"contain\": true }'>"; //Inizializzo il carosello del relativo periodo.
@@ -235,6 +239,7 @@
                     
                     echo "<p class=\"trip-description\">" . $descriptions[$i] . "</p>"; //Infine aggiungo la descrizione come didascalia. 
                     echo "</div>";
+                    $i++;
                 }
             ?>
 
