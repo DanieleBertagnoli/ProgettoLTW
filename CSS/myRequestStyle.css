@@ -33,7 +33,7 @@ a
 }
 
 h1
-{ color: --bs-body-color; }
+{ color:  var(--bs-body-color); }
 
 a:hover
 { 

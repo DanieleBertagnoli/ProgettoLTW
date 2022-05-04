@@ -97,6 +97,15 @@ function checkForm()
             return false;
         }
 
+        if($("#end" + (i+1)).val() > new Date().toISOString().slice(0, 10)) //Se il campo data end-i è successivo alla data odierna
+        { 
+            var errorMessage = "La data di fine periodo deve essere inferiore a quella odierna"; 
+            $("#end" + (i+1)).css("border-color", "rgba(200, 37, 37, 0.9)");
+            $("#end" + (i+1)).css("border-width", "2px");
+            setError(errorMessage);
+            return false;
+        }
+
         if($("#end" + (i+1)).val() < $("#start" + (i+1)).val()) //Se la data di fine è minore della data di inizio
         { 
             var errorMessage = "Le data di fine periodo deve essere successiva alla data di inizio periodo"; 

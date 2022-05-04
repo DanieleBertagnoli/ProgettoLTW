@@ -190,8 +190,8 @@ function confirmCountry()
             if(status != "success") //Se la richiesta non va a buon fine
             {  
                 var errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio della nazione. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
-                if(document.getElementById("errorMessagePassword") == null) //Se non esiste l'elemento lo creo
-                { document.getElementById("passwordElement").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible" id="errorMessageCountry" style="height: fit-content"></div>'); }
+                if(document.getElementById("errorMessageCountry") == null) //Se non esiste l'elemento lo creo
+                { document.getElementById("countryElement").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible" id="errorMessageCountry" style="height: fit-content"></div>'); }
                 $("#errorMessageCountry").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"errorMessageCountry\")\'></button>"); //Aggiungo l'HTML interno alla div
                 return ;
             }
@@ -287,6 +287,68 @@ function abortChangeDate(oldDate)
 {
     $("#dateElement").html( '<p class="profile-label">Data di nascita: ' + oldDate + '</p>' +
                             '<button class="btn-change ms-3" onclick=\'changeDate("' + oldDate + '")\'>Cambia</button>');  //Ripristino l'elemento precedente
+}
+
+function changePrivacy(oldPrivacy)
+{
+    $("#privacyElement").html(  '<select class="form-select" style ="width: fit-content; heigth: fit-content;" name="newPrivacy" id="newPrivacy" onchange="confirmPrivacy()">' +
+                                '<option value="N/S" selected>Seleziona la tua privacy</option>' +                            
+                                '<option value="Pubblico">Pubblico</option>' +
+                                '<option value="Privato">Privato</option>' +
+                                '</select><button class="btn-change ms-2" onclick=\'return abortChangePrivacy("' + oldPrivacy + '");\'>Annulla</button>'); //Sostitusco l'elemento presente con un menù per la selezione della nuova privacy
+}
+
+function confirmPrivacy()
+{
+    var newPrivacy = $("#newPrivacy").val();
+
+    $.post("Utility/PHP/updatePrivacy.php",
+        {
+            newPrivacy: newPrivacy //Imposto i parametri della richiesta
+        },
+        function(data, status)
+        {
+            if(status != "success") //Se la richiesta non va a buon fine
+            {  
+                var errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio della privacy. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+                if(document.getElementById("errorMessagePrivacy") == null) //Se non esiste l'elemento lo creo
+                { document.getElementById("privacyElement").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible" id="errorMessagePrivacy" style="height: fit-content"></div>'); }
+                $("#errorMessagePrivacy").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"errorMessagePrivacy\")\'></button>"); //Aggiungo l'HTML interno alla div
+                return ;
+            }
+            else //Se la richiesta va a buon fine
+            {
+                var errorMessage = "";
+                
+                if(data == "update") //Se la risposta è la stringa "update" allora c'è stato un errore durante l'update
+                { errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio della privacy a causa del mancato aggiornamento del database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+                
+                if(data == "parametri") //Se la risposta è la stringa "parametri" allora c'è stato un errore con i parametri passati
+                { errorMessage = "Siamo spiacenti, si è verificato un errore durante il cambio della privacy a causa di alcuni parametri mancanti o di mancata connessione al database. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti."; }
+
+                if(data != "ok") //Se la risposta non è stata la stringa ok, creo il popup di errore
+                {
+                    if(document.getElementById("errorMessagePrivacy") == null) //Se non esiste l'elemento lo creo
+                    { document.getElementById("privacyElement").insertAdjacentHTML("beforebegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible" id="errorMessagePrivacy" style="height: fit-content"></div>'); }
+                    $("#errorMessagePrivacy").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"errorMessagePrivacy\")\'></button>"); //Aggiungo l'HTML interno alla div
+                }
+                else //Altrimenti creo il popup di successo
+                {
+                    $("#privacyElement").html(  '<p class="profile-label">Visibiltà: ' + newPrivacy + '</p>' +
+                                                '<button class="btn-change ms-3" onclick="changePrivacy()">Cambia</button>');
+                    
+                    document.getElementById("privacyElement").insertAdjacentHTML("beforebegin",'<div class="alert alert-success d-flex align-items-end alert-dismissible" id="errorMessagePrivacy" style="height: fit-content"><strong class=\'mx-2\'>Il cambio della privacy è stato effettuato con successo!</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"errorMessagePrivacy\")\'></button></div>');  
+                }
+            }
+        });
+
+    return true;
+}
+
+function abortChangePrivacy(oldPrivacy)
+{
+    $("#privacyElement").html(  '<p class="profile-label">Visibilità: ' + oldPrivacy + '</p>' +
+                                '<button class="btn-change ms-3" onclick=\'changePrivacy("' + oldPrivacy + '")\'>Cambia</button>');  //Ripristino l'elemento precedente
 }
 
 function setInvisible(element)

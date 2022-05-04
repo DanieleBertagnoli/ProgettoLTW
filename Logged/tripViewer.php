@@ -33,6 +33,13 @@
     $result = $query -> get_result();
     $row = $result -> fetch_assoc();
 
+    if($row == 0) //L'itinerario richiesto non esiste
+    {
+        $errorMessage = "Siamo spiacenti, l'itinerario richiesto non esiste. Se l'errore persiste contattare gli sviluppatore tramite la sezione contatti.";
+        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+        exit();
+    }
+
     $title = $row['title'];
 
     //Prendo tutti i relativi campi della query, e toglo i caratteri di sistema.

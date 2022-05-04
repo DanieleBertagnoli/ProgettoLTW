@@ -84,7 +84,7 @@ function refreshVoteAvg(tripID)
             else
             { 
                 var newAvg = data;
-                $("#voteAvg").html("Gli altri utenti hanno votato: " + newAvg + "/5"); //Aggiorno l'etichetta della media dei voti
+                $("#voteAvg").html("Gli altri utenti hanno votato: " + (Math.round(newAvg * 100) / 100).toString() + "/5"); //Aggiorno l'etichetta della media dei voti
             }
         }
     });

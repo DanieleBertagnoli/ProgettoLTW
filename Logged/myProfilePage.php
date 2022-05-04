@@ -44,6 +44,12 @@
     if($country == "")
     { $country = "N/S"; }
 
+    $privacy = $row['privacy'];
+    if($privacy == "0")
+    { $privacy = "Pubblico"; }
+    else
+    { $privacy = "Privato"; }
+
     $profilePic = "../ProfilePics/" . $email;
 
     $admin = isAdmin(); //1 se l'utente è admin, 0 altrimenti
@@ -212,6 +218,15 @@
 
                         <p class="profile-label">Data di nascita: <?php echo $birthDay; ?> </p>
                         <button class='btn-change ms-3' onclick='changeDate(<?php echo "\"$birthDay\"" ?>)'>Cambia</button>
+
+                    </div>
+                    <hr class="profile-separator">
+
+                    <!-- Privacy del profilo -->
+                    <div class="profile-element" id="privacyElement">
+
+                        <p class="profile-label">Visibilità: <?php echo $privacy; ?> </p>
+                        <button class='btn-change ms-3' onclick='changePrivacy(<?php echo "\"$privacy\"" ?>)'>Cambia</button> <!-- Bottone per il cambio della pravicy -->
 
                     </div>
                     <hr class="profile-separator">

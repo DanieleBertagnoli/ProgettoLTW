@@ -286,7 +286,7 @@
                 <h1 class="my-4">Immergiti nella natura!</h1>
                 <p>Se sei un amante della natura, adorerai gli itinerari immersi nel verde proposti dai nostri utenti. Sprofonda nel verde di una foresta o rilassati nei prati sconfinati in cornici idillache.</p>
                 <form action="searchResult.php" method="POST">
-                    <input type="hidden" name="searchBox" value="montagna">
+                    <input type="hidden" name="searchBox" value="montagna mare">
                     <button href="" class="btn btn-primary my-3">Scopri gli itinerari</button>
                 </form>
             </div>

@@ -42,7 +42,6 @@
     }
 
     $result = $query -> get_result();
-    $friends = array(); //Creo un array 
     while($row = $result -> fetch_assoc())
     { $friends[] = $row; } //Inserisco tutti gli utenti in un array indicizzato
     
