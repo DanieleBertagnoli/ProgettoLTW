@@ -75,11 +75,7 @@
 
     $friendRequest = $query -> get_result() -> fetch_assoc();
     if(($friendRequest == 0 || ($friendRequest['pending'] == "1" && $friendRequest['user2'] == $user)) && $email != $user && $privacy == 1) //Se i due utenti non sono amici(oppure è la richiesta è ancora in attesa di essere accettata) e l'utente ha impostato la privacy a 1
-    { 
-        $hideProfile = 1;
-        //header("Location: privateProfilePage.php?user=$user"); //Redirect alla pagina di gestione delle richieste 
-        //exit();
-    } 
+    { $hideProfile = 1; } 
 
     $admin = isAdmin(); //1 se l'utente è admin, 0 altrimenti
 
