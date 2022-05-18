@@ -20,7 +20,7 @@
     if(!$connection) //Se la connessione non va a buon fine
     { 
         $errorMessage = "Siamo spiacenti, si è verificato un errore durante il caricamento della pagina di login a causa della mancata connessione con il database. Se l'errore persiste contattare gli sviluppatori tramite la sezione contatti.";
-        header("Location: errorPage.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
+        header("Location: errorPageLogin.php?errorMessage=" . $errorMessage); //Redirect alla pagina di errore
         exit();
     }
 
