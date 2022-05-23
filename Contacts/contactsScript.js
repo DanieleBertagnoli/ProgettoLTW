@@ -27,7 +27,7 @@ function check()
     { 
         if(document.getElementById("errorMessage") == null) //Se non esiste l'elemento lo creo
         { document.getElementById("form").insertAdjacentHTML("afterbegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible" id="errorMessage" style="height: fit-content"></div>'); }
-        $("#errorMessage").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible()\'></button>"); //Aggiungo l'HTML interno alla div
+        $("#errorMessage").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"errorMessage\")\'></button>"); //Aggiungo l'HTML interno alla div
         return false;
     }
 
@@ -55,10 +55,27 @@ function sendProblem(email, subject, description)
                 { document.getElementById("form").insertAdjacentHTML("afterbegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible" id="errorMessage" style="height: fit-content; width: fit-content; font-size: 20px;"></div>'); }
                 $("#errorMessage").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"errorMessage\")\'></button>"); //Aggiungo l'HTML interno alla div
             }
-            else
-            { window.location.replace("successPage.php"); }
+            else //Se la richiesta va a buon fine
+            {
+                var errorMessage = "";
+                
+                if(data == "insert") //Se la risposta è la stringa "insert" allora c'è stato un errore durante l'insert
+                { 
+                    errorMessage = "Attenzione la password attuale inserita non è corretta"; 
+                    if(document.getElementById("errorMessage") == null) //Se non esiste l'elemento lo creo
+                    { document.getElementById("form").insertAdjacentHTML("afterbegin", '<div class="alert alert-danger d-flex align-items-end alert-dismissible" id="errorMessage" style="height: fit-content; width: fit-content; font-size: 20px;"></div>'); }
+                    $("#errorMessage").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"errorMessage\")\'></button>"); //Aggiungo l'HTML interno alla div
+                }
+                else //Altrimenti creo il popup di successo
+                { 
+                    document.getElementById("form").insertAdjacentHTML("afterbegin",'<div class="alert alert-success d-flex align-items-end alert-dismissible" id="successMessage" style="height: fit-content"><strong class=\'mx-2\'>La segnalazione è stata inviata con successo!</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"successMessage\")\'></button></div>'); 
+                    $("#email").val("");
+                    $("#subject").val("");   
+                    $("#description").val(""); //Azzero i valori dei campi                 
+                }
+            }
         });
 }
 
-function setInvisible()
-{ $("#errorMessage").remove(); } //Elimino la div contenente il messaggio di errore
+function setInvisible(id)
+{ $("#" + id).remove(); } //Elimino la div contenente il messaggio di errore

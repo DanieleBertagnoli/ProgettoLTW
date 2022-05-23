@@ -20,4 +20,7 @@
     $success = $query -> execute();
 
     if(!$success) //Essendo questo un file chiamato esclusivamente da richieste AJAX, il redirect viene effettuato tramite JavaScript
-    { return; }
+    { 
+        echo "insert";
+        return; 
+    }
