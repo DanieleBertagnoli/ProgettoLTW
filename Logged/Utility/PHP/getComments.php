@@ -25,7 +25,13 @@
 
     $comments = "";
     while($row = $result -> fetch_assoc()) //Per ogni commento creo una stringa da poter suddividere tramite regex
-    { $comments = $comments . $row['user'] . "~(~~)~" . $row['datetime'] . "~(~~)~" . $row['text'] . "~(~~)~" . $row['username'] . "~(~~)~"; }
+    { 
+        $comments = $comments . '<div class="comment">' .  
+                                '<h2><a href="externalProfilePage.php?user=' . $row['user'] . '">' . $row['username'] . '</a></h2>' .
+                                '<p class="text">' . $row['text'] . '</p>' .
+                                '<p class="date">' . $row['datetime'] . '</p>' .
+                                '</div>';
+    }
     echo $comments; //Invio i commenti
 
 ?>

@@ -26,7 +26,14 @@
 
     $problems = "";
     while($row = $result -> fetch_assoc()) //Per ogni commento creo una stringa da poter suddividere tramite regex
-    { $problems = $problems . $row['email'] . "~(~~)~" . $row['subject'] . "~(~~)~" . $row['text'] . "~(~~)~" . $row['date'] . "~(~~)~"; }
+    { 
+        $problems = $problems . '<div class="problem">' .
+                                    '<h1>Da: ' . $row['email'] . '</h1>' .
+                                    '<h1>Il: ' . $row['date']  . '</h1>' .
+                                    '<h2>Oggetto: ' . $row['subject'] . '</h2>' .
+                                    '<p>Problema: ' . $row['text'] . '</p>' .
+                                '</div>';
+    }
     echo $problems; //Invio i problemi
 
 ?>

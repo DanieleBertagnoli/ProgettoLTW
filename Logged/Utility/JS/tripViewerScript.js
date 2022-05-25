@@ -169,25 +169,7 @@ function reloadComments(tripID)
                 $("#commentError").html("<strong class=\'mx-2\'>Errore! <br>" + errorMessage + "</strong><button type=\'button\' class=\'btn-close\' onclick=\'setInvisible(\"commentError\")\'></button>"); //Aggiungo l'HTML interno alla div
             }
             else
-            {
-                var comments = data; 
-                comments = comments.split("~(~~)~"); //Suddivido la stringa ottenuta
-                var allCommentsDiv = "";
-                for(var i=comments.length-5; i>=0; i-=4) //Per ogni commento creo una div personalizzata
-                {
-                    var email = comments[i];
-                    var date = comments[i+1];
-                    var text = comments[i+2];
-                    var username = comments[i+3];
-    
-                    allCommentsDiv = allCommentsDiv +   '<div class=\"comment\">' +  
-                                                        '<h2><a href="externalProfilePage.php?user=' + email + '">' + username + '</a></h2>' +
-                                                        '<p class=\"text\">' + text + '</p>' +
-                                                        '<p class=\"date\">' + date + '</p>' +
-                                                        '</div>';
-                }
-                $("#oldComments").html(allCommentsDiv); //Imposto i nuovi commenti
-            }
+            { $("#oldComments").html(data); } //Imposto i nuovi commenti 
         }
     });
 }

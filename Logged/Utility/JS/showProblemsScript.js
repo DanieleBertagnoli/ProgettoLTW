@@ -47,26 +47,9 @@ function update()
                 }
                 else
                 {
-                    var problems = data; 
-                    problems = problems.split("~(~~)~"); //Suddivido la stringa ottenuta
-                    var allProblemsDiv = "";
-                    for(var i=0; i<problems.length-4; i+=4) //Costruisco una div personalizzata per ogni segnalazione
-                    {
-                        var email = problems[i];
-                        var subject = problems[i+1];
-                        var text = problems[i+2];
-                        var date = problems[i+3];
-
-                        allProblemsDiv = allProblemsDiv +   '<div class="problem">' +
-                                                                '<h1>Da: ' + email + '</h1>' +
-                                                                '<h1>Il: ' + date  + '</h1>' +
-                                                                '<h2>Oggetto: ' + subject + '</h2>' +
-                                                                '<p>Problema: ' + text + '</p>' +
-                                                            '</div>';
-                    }
-                    if(allProblemsDiv == "")
-                    { allProblemsDiv = "<h1 class=\"text-center\">Nessuna segnalazione nel periodo indicato!</h1>"; }
-                    $("#problemContainer").html(allProblemsDiv);
+                    if(data == "")
+                    { data = "<h1 class=\"text-center\">Nessuna segnalazione nel periodo indicato!</h1>"; }
+                    $("#problemContainer").html(data);
                 }
             }
             else //Se la richiesta non va a buon fine
