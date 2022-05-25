@@ -208,9 +208,9 @@
                 $tripsNum = count($trips);
 
                 if($tripsNum == 0)
-                { echo "<h1 class=\"text-center\"> Nessun risultato per: \"$keywords\"</h1>"; }
+                { echo "<h1 class=\"text-center\"> Nessun itinerario per: \"$keywords\"</h1>"; }
                 else
-                { echo "<h1 class=\"text-center\"> $tripsNum risultati per: \"$keywords\"</h1>"; }
+                { echo "<h1 class=\"text-center\"> $tripsNum itinerari per: \"$keywords\"</h1>"; }
 
             ?>
 
