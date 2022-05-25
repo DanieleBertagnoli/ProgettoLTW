@@ -88,7 +88,7 @@
                                     <ul class="navbar-nav ms-3 me-auto my-2 my-lg-0 navbar-nav-scroll">
 
                                         <li class="nav-item">
-                                            <a class="nav-link active" aria-current="page" href="../Logged/homePage.php">Home</a> <!-- Link alla home -->
+                                            <a class="nav-link" aria-current="page" href="../Logged/homePage.php">Home</a> <!-- Link alla home -->
                                         </li>
                             
                                         <li class="nav-item">
